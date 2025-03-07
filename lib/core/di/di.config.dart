@@ -52,18 +52,18 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i447.RemoteDataSourceImpl(apiManager: gh<_i266.ApiManager>()));
     gh.factory<_i1053.ContractDataSource>(
         () => _i1057.RemoteRegisterDataSource(gh<_i266.ApiManager>()));
-    gh.factory<_i218.AuthRepo>(() => _i394.AuthRepoImpl(
-        remoteDataSourceContract: gh<_i732.RemoteDataSourceContract>()));
     gh.factory<_i516.RegisterRepo>(
         () => _i811.RegisterRepoImpl(gh<_i1053.ContractDataSource>()));
+    gh.factory<_i218.AuthRepo>(() => _i394.AuthRepoImpl(
+        remoteDataSourceContract: gh<_i732.RemoteDataSourceContract>()));
     gh.factory<_i763.LoginUseCase>(
         () => _i763.LoginUseCase(authRepo: gh<_i218.AuthRepo>()));
-    gh.factory<_i194.RegisterUseCase>(
-        () => _i194.RegisterUseCase(gh<_i516.RegisterRepo>()));
     gh.factory<_i644.AuthViewModelCubit>(
         () => _i644.AuthViewModelCubit(loginUseCase: gh<_i763.LoginUseCase>()));
-    gh.factory<_i469.RegisterCubit>(
-        () => _i469.RegisterCubit(gh<_i194.RegisterUseCase>()));
+    gh.factory<_i194.RegisterUseCase>(
+        () => _i194.RegisterUseCase(gh<_i516.RegisterRepo>()));
+    gh.factory<_i469.RegisterCubit>(() =>
+        _i469.RegisterCubit(registerUseCase: gh<_i194.RegisterUseCase>()));
     return this;
   }
 }

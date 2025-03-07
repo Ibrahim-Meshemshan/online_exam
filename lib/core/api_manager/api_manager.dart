@@ -3,14 +3,15 @@ import 'dart:convert';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:exam_app/config/constant.dart';
-import 'package:exam_app/core/utils/failures.dart';
-import 'package:exam_app/feature/auth/login/data/models/request/login_request.dart';
-import 'package:exam_app/feature/auth/login/data/models/response/login_response_model_Dto.dart';
+
 import 'package:injectable/injectable.dart';
 
+import '../../config/constant.dart';
+import '../../feature/auth/login/data/models/request/login_request.dart';
+import '../../feature/auth/login/data/models/response/login_response_model_Dto.dart';
 import '../../feature/auth/register/data/models/register_requst_model.dart';
 import '../../feature/auth/register/data/models/register_response_model.dart';
+import '../utils/failures.dart';
 
 @singleton
 class ApiManager {
@@ -35,21 +36,28 @@ class ApiManager {
 
       if (connectivityResult.contains(ConnectivityResult.mobile) ||
           connectivityResult.contains(ConnectivityResult.wifi)) {
-        var loginRequest = LoginRequest(email: email, password: password);
+        try {
+          var loginRequest = LoginRequest(email: email, password: password);
 
-        final response = await dio.post(
-          Constant.baseUrlAuth + Constant.login,
-          data: loginRequest.toJson(),
-        );
+          final response = await dio.post(
+            Constant.baseUrlAuth + Constant.login,
+            data: loginRequest.toJson(),
+          );
 
-        var loginResponse =
-            LoginResponseModelDto.fromJson(jsonDecode(response.data));
+          var loginResponse =
+              LoginResponseModelDto.fromJson(jsonDecode(response.data));
 
-        if (response.statusCode! >= 200 && response.statusCode! < 300) {
-          return Right(loginResponse);
-        } else {
-          return Left(ServerError(errorMessage: loginResponse.message));
-        }
+          if (response.statusCode! >= 200 && response.statusCode! < 300) {
+            return Right(loginResponse);
+          } else {
+            return Left(ServerError(errorMessage: loginResponse.message));
+          }
+        } on DioException catch (e) {
+          final errorMessage = e.response?.data?["message"] ??
+              e.message ??
+              "An unexpected error occurred";
+          return Left(NetworkError(errorMessage: errorMessage));
+        } 
       } else {
         print('Connectivity Result: $connectivityResult');
         //no internet connection

@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:exam_app/core/utils/failures.dart';
 
 import 'package:injectable/injectable.dart';
 
+import '../../../../../core/utils/failures.dart';
 import '../../domain/entities/login_response_entity.dart';
 import '../../domain/repositories/auth_repo.dart';
 import '../data_sources/contract/remote_data_source_contract.dart';

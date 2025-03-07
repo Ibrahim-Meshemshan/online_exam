@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../domain/entities/register_request_entity.dart';
@@ -12,22 +11,33 @@ part 'register_state.dart';
 
 @injectable
 class RegisterCubit extends Cubit<RegisterState> {
-  RegisterCubit(this.registerUseCase) : super(RegisterInitial());
+  RegisterCubit({required this.registerUseCase}) : super(RegisterInitial());
 
   final RegisterUseCase registerUseCase;
+  bool isObscurePassword = true;
+  bool isObscureConfirmPassword = true;
 
-  final TextEditingController userNameController = TextEditingController();
-  final TextEditingController firstNameController = TextEditingController();
-  final TextEditingController lastNameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController rePasswordController = TextEditingController();
-  final TextEditingController phoneController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
 
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  TextEditingController userNameController = TextEditingController();
+  TextEditingController firstNameController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController rePasswordController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
 
-  Future<bool> register() async {
-    emit(RegisterLoading());
+
+
+  bool checkValidEmail(String? email) {
+    if (email == null) return false;
+    var regex = RegExp(
+        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+    return regex.hasMatch(email);
+  }
+
+  void register() async {
+    if (!formKey.currentState!.validate()) return;
 
     final requestEntity = RegisterRequestEntity(
       username: userNameController.text,
@@ -39,33 +49,26 @@ class RegisterCubit extends Cubit<RegisterState> {
       phone: phoneController.text,
     );
 
-    final userData = await registerUseCase.call(requestEntity);
+    emit(RegisterLoading());
+    var either = await registerUseCase.call(requestEntity);
 
-    bool isSuccess = false;
-
-    userData.fold(
-      (left) {
-        emit(RegisterFailure(left.errorMessage.toString()));
-        isSuccess = false;
-      },
-      (response) {
-        emit(RegisterSuccess(response));
-        isSuccess = true;
-      },
+    either.fold(
+          (left) => emit(RegisterFailure(left.errorMessage??'')),
+          (response) => emit(RegisterSuccess(response)),
     );
-
-    return isSuccess;
-  }
-
-  @override
-  Future<void> close() {
-    userNameController.dispose();
-    firstNameController.dispose();
-    lastNameController.dispose();
-    emailController.dispose();
-    passwordController.dispose();
-    rePasswordController.dispose();
-    phoneController.dispose();
-    return super.close();
   }
 }
+
+
+// @override
+//   Future<void> close() {
+//     userNameController.dispose();
+//     firstNameController.dispose();
+//     lastNameController.dispose();
+//     emailController.dispose();
+//     passwordController.dispose();
+//     rePasswordController.dispose();
+//     phoneController.dispose();
+//     return super.close();
+//   }
+

@@ -10,8 +10,7 @@ part 'login_view_model_state.dart';
 
 @injectable
 class AuthViewModelCubit extends Cubit<AuthViewModelState> {
-  AuthViewModelCubit({required this.loginUseCase})
-      : super(const AuthViewModelState());
+  AuthViewModelCubit({required this.loginUseCase}) : super(const AuthViewModelState());
   LoginUseCase loginUseCase;
   bool isObscurePassword = true;
   bool rememberMe = false;
@@ -20,6 +19,7 @@ class AuthViewModelCubit extends Cubit<AuthViewModelState> {
 
   TextEditingController emailController =
       TextEditingController(text: 'ali@elevate.com');
+
   //asda
   TextEditingController passwordController =
       TextEditingController(text: 'Elevate@123');
@@ -40,10 +40,8 @@ class AuthViewModelCubit extends Cubit<AuthViewModelState> {
     either.fold(
       (left) => emit(state.copyWith(
           loginState: Status.error, errorMessage: left.errorMessage)),
-      (response) => emit(
-        state.copyWith(
-            loginResponseEntity: response, loginState: Status.success),
-      ),
+      (response) => emit(state.copyWith(
+          loginResponseEntity: response, loginState: Status.success)),
     );
   }
 }

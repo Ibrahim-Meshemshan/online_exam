@@ -1,216 +1,215 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:online_exam/feature/app/presentation/pages/home_screen.dart';
+import '../../../../../core/di/di.dart';
+import '../../../../../core/utils/dialog.dart';
+import '../../../../../core/utils/theme_manager.dart';
 import '../../../login/presentation/widgets/custom_text_form_field.dart';
 import '../cubit/register_cubit.dart';
 
-
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
   static const String routeName = 'register_screen';
+
   const RegisterScreen({super.key});
 
   @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Register")),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: BlocBuilder<RegisterCubit, RegisterState>(
-          builder: (context, state) {
-            print("Current State: $state");
+    return BlocProvider(
+      create: (context) => getIt<RegisterCubit>(),
+      child: Builder(
+        builder: (context) {
+          final viewModel = context.read<RegisterCubit>();
 
-            if (state is RegisterLoading) {
-              return const Center(child: CircularProgressIndicator());
-            }
-
-            if (state is RegisterFailure) {
-              return Center(
-                  child: Text(state.errorMessage,
-                      style: const TextStyle(color: Colors.red)));
-            }
-
-            return SingleChildScrollView(
-              child: Form(
-                key: context.read<RegisterCubit>().formKey,
-                child: Column(
-                  spacing: 30,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomTextFormField(
-                      controller:
-                          context.read<RegisterCubit>().userNameController,
-                      labelText: "Username",
-                      hintText: "Enter your username",
-                      isObscure: false,
-                      keyboardType: TextInputType.text,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'This user name is not valid';
-                        }
-                        return null;
-                      },
-                    ),
-                    Row(
-                      spacing: 5,
+          return Scaffold(
+            appBar: AppBar(title: const Text("Register")),
+            body: BlocListener<RegisterCubit, RegisterState>(
+              listener: (context, state) {
+                if (state is RegisterLoading) {
+                  DialogUtils.showLoading(context, 'Loading...');
+                } else {
+                  DialogUtils.hideLoading(context);
+                  if (state is RegisterFailure) {
+                    DialogUtils.showMessage(
+                        context, state.errorMessage ?? 'Registration failed');
+                  } else if (state is RegisterSuccess) {
+                    DialogUtils.showMessage(context, 'Registered Successfully');
+                    Navigator.pop(context);
+                  }
+                }
+              },
+              child: Padding(
+                padding: EdgeInsets.all(16.sp),
+                child: Form(
+                  key: viewModel.formKey,
+                  child: SingleChildScrollView(
+                    child: Column(
                       children: [
-                        Expanded(
-                          child: CustomTextFormField(
-                            controller: context
-                                .read<RegisterCubit>()
-                                .firstNameController,
-                            labelText: "First Name",
-                            hintText: "Enter first name",
-                            isObscure: false,
-                            keyboardType: TextInputType.text,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Enter a first name';
-                              }
-                              return null;
-                            },
-                          ),
+                        CustomTextFormField(
+                          controller: viewModel.userNameController,
+                          labelText: "Username",
+                          hintText: "Enter your username",
+                          keyboardType: TextInputType.text,
+                          validator: (value) => value!.isEmpty
+                              ? 'This user name is not valid'
+                              : null,
                         ),
-                        Expanded(
-                          child: CustomTextFormField(
-                            controller: context
-                                .read<RegisterCubit>()
-                                .lastNameController,
-                            labelText: "Last Name",
-                            hintText: "Enter last name",
-                            isObscure: false,
-                            keyboardType: TextInputType.text,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Enter a last name';
-                              }
-                              return null;
-                            },
-                          ),
+                        15.verticalSpace,
+                        Row(
+                          children: [
+                            Expanded(
+                              child: CustomTextFormField(
+                                controller: viewModel.firstNameController,
+                                labelText: "First Name",
+                                hintText: "Enter first name",
+                                keyboardType: TextInputType.text,
+                                validator: (value) => value!.isEmpty
+                                    ? 'Enter a first name'
+                                    : null,
+                              ),
+                            ),
+                            10.horizontalSpace,
+                            Expanded(
+                              child: CustomTextFormField(
+                                controller: viewModel.lastNameController,
+                                labelText: "Last Name",
+                                hintText: "Enter last name",
+                                keyboardType: TextInputType.text,
+                                validator: (value) =>
+                                    value!.isEmpty ? 'Enter a last name' : null,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    CustomTextFormField(
-                      controller: context.read<RegisterCubit>().emailController,
-                      labelText: "Email",
-                      hintText: "Enter your Email",
-                      isObscure: false,
-                      keyboardType: TextInputType.text,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'This Email is not valid';
-                        }
-                        return null;
-                      },
-                    ),
-                    Row(
-                      spacing: 5,
-                      children: [
-                        Expanded(
-                          child: CustomTextFormField(
-                            controller: context
-                                .read<RegisterCubit>()
-                                .passwordController,
-                            labelText: "Password",
-                            hintText: "Enter Password",
-                            isObscure: false,
-                            keyboardType: TextInputType.text,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Enter a Password';
-                              }
-                              return null;
-                            },
-                          ),
+                        15.verticalSpace,
+                        CustomTextFormField(
+                          controller: viewModel.emailController,
+                          labelText: "Email",
+                          hintText: "Enter your Email",
+                          keyboardType: TextInputType.emailAddress,
+                          validator: (value) =>
+                              viewModel.checkValidEmail(value!)
+                                  ? null
+                                  : 'Invalid email',
                         ),
-                        Expanded(
-                          child: CustomTextFormField(
-                            controller: context
-                                .read<RegisterCubit>()
-                                .rePasswordController,
-                            labelText: "Confirm password",
-                            hintText: "Confirm password",
-                            isObscure: false,
-                            keyboardType: TextInputType.text,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please confirm your password';
-                              }
-                              if (value !=
-                                  context
-                                      .read<RegisterCubit>()
-                                      .passwordController
-                                      .text) {
-                                return 'Passwords do not match';
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                    CustomTextFormField(
-                      controller: context.read<RegisterCubit>().phoneController,
-                      labelText: "Phone number",
-                      hintText: "Enter your Phone number",
-                      isObscure: false,
-                      keyboardType: TextInputType.phone,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter a Phone number';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 60,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xff02369C),
-                        ),
-                        onPressed: () async {
-                          if (context
-                              .read<RegisterCubit>()
-                              .formKey
-                              .currentState!
-                              .validate()) {
-                            bool success =
-                                await context.read<RegisterCubit>().register();
-                            if (success) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content:  Text("تم التسجيل بنجاح "),
-                                  backgroundColor: Colors.green,
-                                  duration: Duration(seconds: 3),
+                        15.verticalSpace,
+                        Row(
+                          children: [
+                            Expanded(
+                              child: CustomTextFormField(
+                                controller: viewModel.passwordController,
+                                labelText: "Password",
+                                hintText: "Enter Password",
+                                isObscure: viewModel.isObscurePassword,
+                                keyboardType: TextInputType.visiblePassword,
+                                icon: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      viewModel.isObscurePassword =
+                                      !viewModel.isObscurePassword;
+                                    });
+                                  },
+                                  icon: Icon(
+                                    viewModel.isObscurePassword
+                                        ? Icons.visibility_off_rounded
+                                        : Icons.visibility_rounded,
+                                  ),
                                 ),
-                              );
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("لم يتم التسجيل بنجاح "),
-                                  backgroundColor: Colors.red,
-                                  duration: Duration(seconds: 3),
+                                validator: (value) => value!.length < 6
+                                    ? 'Password too short'
+                                    : null,
+                              ),
+                            ),
+                            10.horizontalSpace,
+                            Expanded(
+                              child: CustomTextFormField(
+                                controller: viewModel.rePasswordController,
+                                labelText: "Confirm password",
+                                hintText: "Confirm password",
+                                keyboardType: TextInputType.visiblePassword,
+                                validator: (value) =>
+                                    value != viewModel.passwordController.text
+                                        ? 'Passwords do not match'
+                                        : null,
+                                isObscure: viewModel.isObscureConfirmPassword,
+                                icon: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      viewModel.isObscureConfirmPassword =
+                                      !viewModel.isObscureConfirmPassword;
+                                    });
+                                  },
+                                  icon: Icon(
+                                    viewModel.isObscureConfirmPassword
+                                        ? Icons.visibility_off_rounded
+                                        : Icons.visibility_rounded,
+                                  ),
                                 ),
-                              );
+                              ),
+                            ),
+                          ],
+                        ),
+                        15.verticalSpace,
+                        CustomTextFormField(
+                          controller: viewModel.phoneController,
+                          labelText: "Phone number",
+                          hintText: "Enter your Phone number",
+                          keyboardType: TextInputType.phone,
+                          validator: (value) {
+                            if(value==null || value.isEmpty){
+                              return 'please enter a valid phone number';
+                            }else if(value.length<11){
+                              return 'enter Egypt phone number';
                             }
-                          }
-                        },
-                        child: const Text(
-                          "SignUp",
-                          style: TextStyle(color: Colors.white, fontSize: 18),
+                            return null;
+                          },
+
                         ),
-                      ),
+                        30.verticalSpace,
+                        Row(
+                          children: [
+                            Expanded(
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: ThemeManager.buttonColor,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(25.r)),
+                                  padding: EdgeInsets.all(14.sp),
+                                ),
+                                onPressed: () {
+                                  if (viewModel.formKey.currentState!
+                                      .validate()) {
+                                    viewModel.register();
+                                    Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+                                  }
+
+                                },
+                                child: Text(
+                                  "Sign Up",
+                                  style: ThemeManager
+                                      .appTheme.textTheme.titleSmall
+                                      ?.copyWith(fontWeight: FontWeight.w900),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }
 }
+//git config --global --add safe.directory "C:/المسار_الكامل_لمجلد_المشروع"

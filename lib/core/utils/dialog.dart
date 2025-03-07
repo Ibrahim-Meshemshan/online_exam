@@ -27,11 +27,11 @@ class DialogUtils {
     );
   }
 
- static void hideLoading(BuildContext context) {
-  if (Navigator.canPop(context)) {
-    Navigator.pop(context);
+  static void hideLoading(BuildContext context) {
+    if (Navigator.canPop(context)) {
+      Navigator.pop(context);
+    }
   }
-}
 
   static void showSnackBar(BuildContext context, String message,
       {bool isError = true}) {
@@ -48,13 +48,13 @@ class DialogUtils {
   }
 
   static void showMessage(
-    BuildContext context,
-    String message, {
-    String title = 'Notification',
-    String? posActionName = 'OK',
-    VoidCallback? posAction,
-    bool isError = true,
-  }) {
+      BuildContext context,
+      String message, {
+        String title = 'Notification',
+        String? posActionName = 'OK',
+        VoidCallback? posAction,
+        bool isError = true,
+      }) {
     showDialog(
       context: context,
       builder: (context) {

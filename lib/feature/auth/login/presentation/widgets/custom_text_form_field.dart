@@ -1,6 +1,7 @@
-import 'package:exam_app/core/utils/theme_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../../../../core/utils/theme_manager.dart';
 
 class CustomTextFormField extends StatelessWidget {
   final String hintText;
@@ -17,7 +18,7 @@ class CustomTextFormField extends StatelessWidget {
     required this.hintText,
     required this.keyboardType,
     this.icon,
-    required this.isObscure,
+    this.isObscure = false,
     required this.controller,
     required this.validator,
   });

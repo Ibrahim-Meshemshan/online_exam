@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:exam_app/core/utils/failures.dart';
 
+import '../../../../../../core/utils/failures.dart';
 import '../../models/register_requst_model.dart';
 import '../../models/register_response_model.dart';
 
