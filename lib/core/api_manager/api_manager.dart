@@ -44,8 +44,8 @@ class ApiManager {
             data: loginRequest.toJson(),
           );
 
-          var loginResponse =
-              LoginResponseModelDto.fromJson(jsonDecode(response.data));
+          var loginResponse = LoginResponseModelDto.fromJson(response.data);
+
 
           if (response.statusCode! >= 200 && response.statusCode! < 300) {
             return Right(loginResponse);

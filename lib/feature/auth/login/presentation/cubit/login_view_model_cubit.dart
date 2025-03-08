@@ -20,7 +20,7 @@ class AuthViewModelCubit extends Cubit<AuthViewModelState> {
   TextEditingController emailController =
       TextEditingController(text: 'ali@elevate.com');
 
-  //asda
+
   TextEditingController passwordController =
       TextEditingController(text: 'Elevate@123');
 
