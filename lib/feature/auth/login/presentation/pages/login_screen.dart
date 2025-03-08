@@ -35,18 +35,20 @@ class _LoginScreenState extends State<LoginScreen> {
             body: BlocListener<AuthViewModelCubit, AuthViewModelState>(
               listener: (context, state) {
                 if (state.loginState == Status.loading) {
-                  print(state);
+                
                   DialogUtils.showLoading(context, 'Loading ...');
-                  print(state);
+               
                 } else {
-                  print(state);
+                
                   DialogUtils.hideLoading(context);
-                  print(state);
+                 
                   if (state.loginState == Status.error) {
-                    print(state);
+                
                     DialogUtils.showMessage(
                         context, state.errorMessage ?? 'Login failed');
                   } else if (state.loginState == Status.success) {
+                    Shared.saveData(key: 'Token',value: state.loginResponseEntity?.token);
+                    
                     Navigator.pushReplacementNamed(
                         context, HomeScreen.routeName);
                   }
