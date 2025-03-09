@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:online_exam/feature/auth/edit_profile/presentation/page/edit_profile_screen.dart';
 
 import 'core/di/di.dart';
 import 'core/utils/sharedpreferences.dart';
@@ -42,12 +43,13 @@ class Online_Exam extends StatelessWidget {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           home: const LoginScreen(),
-          initialRoute: LoginScreen.routeName,
+          initialRoute: EditProfileScreen.routeName,
           routes: {
             LoginScreen.routeName: (context) => const LoginScreen(),
             HomeScreen.routeName: (context) => const HomeScreen(),
             ForgetPasswordScreen.routeName: (context) => const ForgetPasswordScreen(),
             RegisterScreen.routeName: (context) => const RegisterScreen(),
+            EditProfileScreen.routeName: (context) => const EditProfileScreen(),
           },
         );
       },

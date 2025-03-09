@@ -10,10 +10,12 @@ class CustomTextFormField extends StatelessWidget {
   final String? Function(String?)? validator;
   final bool isObscure;
   final TextInputType keyboardType;
-  String labelText;
+  final Widget? suffix;
+  final String labelText;
 
   CustomTextFormField({
     super.key,
+    this.suffix,
     required this.labelText,
     required this.hintText,
     required this.keyboardType,
@@ -37,6 +39,7 @@ class CustomTextFormField extends StatelessWidget {
           validator: validator,
           controller: controller,
           decoration: InputDecoration(
+            suffix: suffix,
             labelText: labelText,
             hintText: hintText,
             hintStyle: const TextStyle(
