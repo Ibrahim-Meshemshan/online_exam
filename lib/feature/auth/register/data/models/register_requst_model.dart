@@ -1,33 +1,45 @@
-class RegisterRequestModel {
-  String? username;
-  String? firstName;
-  String? lastName;
-  String? email;
-  String? password;
-  String? rePassword;
-  String? phone;
+import 'package:online_exam/feature/auth/register/domain/entities/register_request_entity.dart';
 
-  // Constructor
+class RegisterRequestModel extends RegisterRequestEntity {
   RegisterRequestModel({
-    this.username,
-    this.firstName,
-    this.lastName,
-    this.email,
-    this.password,
-    this.rePassword,
-    this.phone,
-  });
+    required String username,
+    required String firstName,
+    required String lastName,
+    required String email,
+    required String password,
+    required String rePassword,
+    required String phone,
+  }) : super(
+          username: username,
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          password: password,
+          rePassword: rePassword,
+          phone: phone,
+        );
 
-  // Convert Object to JSON (for API requests)
+  factory RegisterRequestModel.fromEntity(RegisterRequestEntity entity) {
+    return RegisterRequestModel(
+      username: entity.username ?? '',
+      firstName: entity.firstName ?? '',
+      lastName: entity.lastName ?? '',
+      email: entity.email ?? '',
+      password: entity.password ?? '',
+      rePassword: entity.rePassword ?? '',
+      phone: entity.phone ?? '',
+    );
+  }
+
   Map<String, dynamic> toJson() {
     return {
-      'username': username,
-      'firstName': firstName,
-      'lastName': lastName,
-      'email': email,
-      'password': password,
-      'rePassword': rePassword,
-      'phone': phone,
+      "username": username,
+      "firstName": firstName,
+      "lastName": lastName,
+      "email": email,
+      "password": password,
+      "rePassword": rePassword,
+      "phone": phone,
     };
   }
 }

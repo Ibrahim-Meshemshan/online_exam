@@ -1,43 +1,32 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
-
-import '../../domain/entities/register_request_entity.dart';
-import '../../domain/entities/register_response_entity.dart';
-import '../../domain/usecases/register_usecase.dart';
-
+import 'package:online_exam/feature/auth/register/domain/entities/register_request_entity.dart';
+import 'package:online_exam/feature/auth/register/domain/entities/register_response_entity.dart';
+import 'package:online_exam/feature/auth/register/domain/usecases/register_usecase.dart';
 part 'register_state.dart';
 
 @injectable
 class RegisterCubit extends Cubit<RegisterState> {
-  RegisterCubit({required this.registerUseCase}) : super(RegisterInitial());
+  RegisterCubit(this.registerUsecase) : super(RegisterInitial());
 
-  final RegisterUseCase registerUseCase;
-  bool isObscurePassword = true;
-  bool isObscureConfirmPassword = true;
+  final RegisterUsecase registerUsecase;
 
-  final formKey = GlobalKey<FormState>();
+  final TextEditingController userNameController = TextEditingController();
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController repasswordController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
 
-  TextEditingController userNameController = TextEditingController();
-  TextEditingController firstNameController = TextEditingController();
-  TextEditingController lastNameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController rePasswordController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
+  Future<bool> register() async {
+    if (!formKey.currentState!.validate()) return false;
 
-
-  bool checkValidEmail(String? email) {
-    if (email == null) return false;
-    var regex = RegExp(
-        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
-    return regex.hasMatch(email);
-  }
-
-  void register() async {
-    if (!formKey.currentState!.validate()) return;
+    emit(RegisterLoading());
 
     final requestEntity = RegisterRequestEntity(
       username: userNameController.text,
@@ -45,30 +34,37 @@ class RegisterCubit extends Cubit<RegisterState> {
       lastName: lastNameController.text,
       email: emailController.text,
       password: passwordController.text,
-      rePassword: rePasswordController.text,
+      rePassword: repasswordController.text,
       phone: phoneController.text,
     );
 
-    emit(RegisterLoading());
-    var either = await registerUseCase.call(requestEntity);
+    final userData = await registerUsecase.call(requestEntity);
 
-    either.fold(
-          (left) => emit(RegisterFailure(left.errorMessage??'')),
-          (response) => emit(RegisterSuccess(response)),
+    bool isSuccess = false;
+
+    userData.fold(
+      (left) {
+        emit(RegisterFailure(left.errorMessage.toString()));
+        isSuccess = false;
+      },
+      (response) {
+        emit(RegisterSuccess(response));
+        isSuccess = true;
+      },
     );
+
+    return isSuccess;
+  }
+
+  @override
+  Future<void> close() {
+    userNameController.dispose();
+    firstNameController.dispose();
+    lastNameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    repasswordController.dispose();
+    phoneController.dispose();
+    return super.close();
   }
 }
-
-
-// @override
-//   Future<void> close() {
-//     userNameController.dispose();
-//     firstNameController.dispose();
-//     lastNameController.dispose();
-//     emailController.dispose();
-//     passwordController.dispose();
-//     rePasswordController.dispose();
-//     phoneController.dispose();
-//     return super.close();
-//   }
-
