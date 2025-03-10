@@ -12,6 +12,16 @@
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
+import '../../feature/auth/edit_profile/data/data_source/contract/remote_data_source_contract.dart'
+    as _i379;
+import '../../feature/auth/edit_profile/data/data_source/remote/remote_data_source_impl.dart'
+    as _i370;
+import '../../feature/auth/edit_profile/data/repository/profile_repo_impl.dart'
+    as _i175;
+import '../../feature/auth/edit_profile/domain/repository/profile_repo.dart'
+    as _i960;
+import '../../feature/auth/edit_profile/domain/use_case/get_profile.dart'
+    as _i198;
 import '../../feature/auth/login/data/data_sources/contract/remote_data_source_contract.dart'
     as _i732;
 import '../../feature/auth/login/data/data_sources/remote/remote_data_source_impl.dart'
@@ -48,14 +58,20 @@ extension GetItInjectableX on _i174.GetIt {
       environmentFilter,
     );
     gh.singleton<_i266.ApiManager>(() => _i266.ApiManager());
+    gh.singleton<_i379.RemoteDataSourceContract>(
+        () => _i370.RemoteDataSourceImpl(apiManager: gh<_i266.ApiManager>()));
     gh.singleton<_i732.RemoteDataSourceContract>(
         () => _i447.RemoteDataSourceImpl(apiManager: gh<_i266.ApiManager>()));
     gh.factory<_i1053.ContractDataSource>(
         () => _i1057.RemoteRegisterDataSource(gh<_i266.ApiManager>()));
+    gh.factory<_i960.ProfileRepo>(() => _i175.ProfileRepoImpl(
+        remoteDataSourceContract: gh<_i379.RemoteDataSourceContract>()));
     gh.factory<_i516.RegisterRepo>(
         () => _i811.RegisterRepoImpl(gh<_i1053.ContractDataSource>()));
     gh.factory<_i218.AuthRepo>(() => _i394.AuthRepoImpl(
         remoteDataSourceContract: gh<_i732.RemoteDataSourceContract>()));
+    gh.factory<_i198.GetProfile>(
+        () => _i198.GetProfile(profileRepo: gh<_i960.ProfileRepo>()));
     gh.factory<_i763.LoginUseCase>(
         () => _i763.LoginUseCase(authRepo: gh<_i218.AuthRepo>()));
     gh.factory<_i644.AuthViewModelCubit>(

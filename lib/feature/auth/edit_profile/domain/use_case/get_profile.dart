@@ -1,13 +1,16 @@
 import 'package:dartz/dartz.dart';
+import 'package:injectable/injectable.dart';
 import 'package:online_exam/core/utils/failures.dart';
 import 'package:online_exam/feature/auth/edit_profile/domain/entity/profile_entity.dart';
 import 'package:online_exam/feature/auth/edit_profile/domain/repository/profile_repo.dart';
 
+@injectable
 class GetProfile {
   ProfileRepo profileRepo;
+
   GetProfile({required this.profileRepo});
 
-  Future<Either<Failures,ProfileEntity>> call(){
+  Future<Either<Failures, ProfileEntity>> call() {
     return profileRepo.getProfile();
   }
 }

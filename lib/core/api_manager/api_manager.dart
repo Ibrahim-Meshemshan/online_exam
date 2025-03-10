@@ -5,6 +5,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 
 import 'package:injectable/injectable.dart';
+import 'package:online_exam/feature/auth/edit_profile/data/model/profile_dto.dart';
 
 import '../../config/constant.dart';
 import '../../feature/auth/login/data/models/request/login_request.dart';
@@ -40,12 +41,11 @@ class ApiManager {
           var loginRequest = LoginRequest(email: email, password: password);
 
           final response = await dio.post(
-            Constant.baseUrlAuth + Constant.login,
+            Constant.baseUrlAuth + Constant.loginEndpoint,
             data: loginRequest.toJson(),
           );
 
           var loginResponse = LoginResponseModelDto.fromJson(response.data);
-
 
           if (response.statusCode! >= 200 && response.statusCode! < 300) {
             return Right(loginResponse);
@@ -57,7 +57,7 @@ class ApiManager {
               e.message ??
               "An unexpected error occurred";
           return Left(NetworkError(errorMessage: errorMessage));
-        } 
+        }
       } else {
         print('Connectivity Result: $connectivityResult');
         //no internet connection
@@ -76,7 +76,7 @@ class ApiManager {
 
     try {
       final response = await dio.post(
-        "${Constant.baseUrlAuth}${Constant.signup}",
+        "${Constant.baseUrlAuth}${Constant.signupEndpoint}",
         data: registerRequest.toJson(),
       );
 
@@ -88,6 +88,41 @@ class ApiManager {
           e.message ??
           "An unexpected error occurred";
       return Left(ServerError(errorMessage: errorMessage));
+    }
+  }
+
+  Future<Either<Failures, ProfileDto>> getProfile() async {
+    {
+      final List<ConnectivityResult> connectivityResult =
+          await (Connectivity().checkConnectivity());
+
+      if (connectivityResult.contains(ConnectivityResult.mobile) ||
+          connectivityResult.contains(ConnectivityResult.wifi)) {
+        try {
+          final response = await dio.get(
+            Constant.baseUrlAuth + Constant.profileEndpoint,
+          );
+
+          var profileResponse = ProfileDto.fromJson(response.data);
+
+          if (response.statusCode! >= 200 && response.statusCode! < 300) {
+            return Right(profileResponse);
+          } else {
+            return Left(ServerError(errorMessage: profileResponse.message));
+          }
+        } on DioException catch (e) {
+          final errorMessage = e.response?.data?["message"] ??
+              e.message ??
+              "An unexpected error occurred";
+          return Left(NetworkError(errorMessage: errorMessage));
+        }
+      } else {
+        print('Connectivity Result: $connectivityResult');
+        //no internet connection
+        return Left(
+          NetworkError(errorMessage: 'please check internet connection'),
+        );
+      }
     }
   }
 }
