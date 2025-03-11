@@ -13,6 +13,7 @@ import '../../feature/auth/login/data/models/response/login_response_model_Dto.d
 import '../../feature/auth/register/data/models/register_requst_model.dart';
 import '../../feature/auth/register/data/models/register_response_model.dart';
 import '../utils/failures.dart';
+import '../utils/sharedpreferences.dart';
 
 @singleton
 class ApiManager {
@@ -101,6 +102,11 @@ class ApiManager {
         try {
           final response = await dio.get(
             Constant.baseUrlAuth + Constant.profileEndpoint,
+            options: Options(
+              headers: {
+                "token": Constant.token,
+              },
+            ),
           );
 
           var profileResponse = ProfileDto.fromJson(response.data);
@@ -111,6 +117,7 @@ class ApiManager {
             return Left(ServerError(errorMessage: profileResponse.message));
           }
         } on DioException catch (e) {
+          print('DioException: ${e.response?.statusCode}, ${e.response?.data}');
           final errorMessage = e.response?.data?["message"] ??
               e.message ??
               "An unexpected error occurred";

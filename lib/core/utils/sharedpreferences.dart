@@ -28,6 +28,7 @@ class Shared {
 
 
 
+
   static Object? getDat({required String key}){
     return sharedPreference.get(key);
   }

@@ -5,12 +5,12 @@ import 'package:online_exam/feature/auth/edit_profile/domain/entity/profile_enti
 import 'package:online_exam/feature/auth/edit_profile/domain/repository/profile_repo.dart';
 
 @injectable
-class GetProfile {
+class GetProfileUseCase {
   ProfileRepo profileRepo;
 
-  GetProfile({required this.profileRepo});
+  GetProfileUseCase({required this.profileRepo});
 
   Future<Either<Failures, ProfileEntity>> call() {
-    return profileRepo.getProfile();
+    return profileRepo.profile();
   }
 }

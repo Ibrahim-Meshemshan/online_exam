@@ -49,7 +49,7 @@ class Online_Exam extends StatelessWidget {
             HomeScreen.routeName: (context) => const HomeScreen(),
             ForgetPasswordScreen.routeName: (context) => const ForgetPasswordScreen(),
             RegisterScreen.routeName: (context) => const RegisterScreen(),
-            EditProfileScreen.routeName: (context) => const EditProfileScreen(),
+            EditProfileScreen.routeName: (context) =>  EditProfileScreen(),
           },
         );
       },
@@ -58,3 +58,4 @@ class Online_Exam extends StatelessWidget {
 }
 
 //flutter packages pub run build_runner watch
+//flutter packages pub run build_runner build

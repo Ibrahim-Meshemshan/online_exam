@@ -20,8 +20,10 @@ import '../../feature/auth/edit_profile/data/repository/profile_repo_impl.dart'
     as _i175;
 import '../../feature/auth/edit_profile/domain/repository/profile_repo.dart'
     as _i960;
-import '../../feature/auth/edit_profile/domain/use_case/get_profile.dart'
-    as _i198;
+import '../../feature/auth/edit_profile/domain/use_case/get_profile_use_case.dart'
+    as _i34;
+import '../../feature/auth/edit_profile/presentation/cubit/profile_view_model_cubit.dart'
+    as _i96;
 import '../../feature/auth/login/data/data_sources/contract/remote_data_source_contract.dart'
     as _i732;
 import '../../feature/auth/login/data/data_sources/remote/remote_data_source_impl.dart'
@@ -70,12 +72,14 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i811.RegisterRepoImpl(gh<_i1053.ContractDataSource>()));
     gh.factory<_i218.AuthRepo>(() => _i394.AuthRepoImpl(
         remoteDataSourceContract: gh<_i732.RemoteDataSourceContract>()));
-    gh.factory<_i198.GetProfile>(
-        () => _i198.GetProfile(profileRepo: gh<_i960.ProfileRepo>()));
+    gh.factory<_i34.GetProfileUseCase>(
+        () => _i34.GetProfileUseCase(profileRepo: gh<_i960.ProfileRepo>()));
     gh.factory<_i763.LoginUseCase>(
         () => _i763.LoginUseCase(authRepo: gh<_i218.AuthRepo>()));
     gh.factory<_i644.AuthViewModelCubit>(
         () => _i644.AuthViewModelCubit(loginUseCase: gh<_i763.LoginUseCase>()));
+    gh.factory<_i96.ProfileViewModelCubit>(() =>
+        _i96.ProfileViewModelCubit(getProfile: gh<_i34.GetProfileUseCase>()));
     gh.factory<_i194.RegisterUseCase>(
         () => _i194.RegisterUseCase(gh<_i516.RegisterRepo>()));
     gh.factory<_i469.RegisterCubit>(() =>

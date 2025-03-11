@@ -12,10 +12,12 @@ class CustomTextFormField extends StatelessWidget {
   final TextInputType keyboardType;
   final Widget? suffix;
   final String labelText;
+  final void Function(String)? onChanged;
 
   CustomTextFormField({
     super.key,
     this.suffix,
+    this.onChanged,
     required this.labelText,
     required this.hintText,
     required this.keyboardType,
@@ -33,6 +35,7 @@ class CustomTextFormField extends StatelessWidget {
         10.verticalSpace,
         10.verticalSpace,
         TextFormField(
+          onChanged: onChanged,
           cursorColor: Colors.black,
           keyboardType: keyboardType,
           obscureText: isObscure,
@@ -43,7 +46,7 @@ class CustomTextFormField extends StatelessWidget {
             labelText: labelText,
             hintText: hintText,
             hintStyle: const TextStyle(
-                fontSize: 14,
+                fontSize: 18,
                 color: Color(0xffa6a6a6),
                 fontWeight: FontWeight.w400),
             labelStyle: TextStyle(color: ThemeManager.blackColor),

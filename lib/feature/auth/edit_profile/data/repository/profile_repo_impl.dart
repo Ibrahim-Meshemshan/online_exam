@@ -10,7 +10,7 @@ class ProfileRepoImpl implements ProfileRepo {
   RemoteDataSourceContract remoteDataSourceContract;
   ProfileRepoImpl({required this.remoteDataSourceContract});
   @override
-  Future<Either<Failures, ProfileEntity>> getProfile() {
+  Future<Either<Failures, ProfileEntity>> profile() {
     return remoteDataSourceContract.getProfile();
   }
 
