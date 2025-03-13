@@ -5,6 +5,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 
 import 'package:injectable/injectable.dart';
+import 'package:online_exam/feature/auth/edit_profile/data/model/change_password_dto.dart';
 import 'package:online_exam/feature/auth/edit_profile/data/model/profile_dto.dart';
 
 import '../../config/constant.dart';
@@ -115,6 +116,95 @@ class ApiManager {
             return Right(profileResponse);
           } else {
             return Left(ServerError(errorMessage: profileResponse.message));
+          }
+        } on DioException catch (e) {
+          print('DioException: ${e.response?.statusCode}, ${e.response?.data}');
+          final errorMessage = e.response?.data?["message"] ??
+              e.message ??
+              "An unexpected error occurred";
+          return Left(NetworkError(errorMessage: errorMessage));
+        }
+      } else {
+        print('Connectivity Result: $connectivityResult');
+        //no internet connection
+        return Left(
+          NetworkError(errorMessage: 'please check internet connection'),
+        );
+      }
+    }
+  }
+
+  Future<Either<Failures, ProfileDto>> editProfile(String lastName) async {
+    {
+      final List<ConnectivityResult> connectivityResult =
+          await (Connectivity().checkConnectivity());
+
+      if (connectivityResult.contains(ConnectivityResult.mobile) ||
+          connectivityResult.contains(ConnectivityResult.wifi)) {
+        try {
+          final response = await dio.put(
+            Constant.baseUrlAuth + Constant.editProfileEndpoint,
+            data: {'lastName': lastName},
+            options: Options(
+              headers: {
+                "token": Constant.token,
+              },
+            ),
+          );
+
+          var profileResponse = ProfileDto.fromJson(response.data);
+
+          if (response.statusCode! >= 200 && response.statusCode! < 300) {
+            return Right(profileResponse);
+          } else {
+            return Left(ServerError(errorMessage: profileResponse.message));
+          }
+        } on DioException catch (e) {
+          print('DioException: ${e.response?.statusCode}, ${e.response?.data}');
+          final errorMessage = e.response?.data?["message"] ??
+              e.message ??
+              "An unexpected error occurred";
+          return Left(NetworkError(errorMessage: errorMessage));
+        }
+      } else {
+        print('Connectivity Result: $connectivityResult');
+        //no internet connection
+        return Left(
+          NetworkError(errorMessage: 'please check internet connection'),
+        );
+      }
+    }
+  }
+
+  Future<Either<Failures, ChangePasswordDto>> changePassword(
+      String oldPassword, newPassword, confirmPassword) async {
+    {
+      final List<ConnectivityResult> connectivityResult =
+          await (Connectivity().checkConnectivity());
+
+      if (connectivityResult.contains(ConnectivityResult.mobile) ||
+          connectivityResult.contains(ConnectivityResult.wifi)) {
+        try {
+          final response = await dio.patch(
+            Constant.baseUrlAuth + Constant.changePasswordEndpoint,
+            data: {
+              "oldPassword": oldPassword,
+              "password": newPassword,
+              "rePassword": confirmPassword
+            },
+            options: Options(
+              headers: {
+                "token": Constant.token,
+              },
+            ),
+          );
+
+          var changePasswordResponse = ChangePasswordDto.fromJson(response.data);
+
+          if (response.statusCode! >= 200 && response.statusCode! < 300) {
+            return Right(changePasswordResponse);
+          } else {
+            return Left(ServerError(errorMessage: changePasswordResponse.message));
           }
         } on DioException catch (e) {
           print('DioException: ${e.response?.statusCode}, ${e.response?.data}');

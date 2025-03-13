@@ -12,12 +12,14 @@ class CustomTextFormField extends StatelessWidget {
   final TextInputType keyboardType;
   final Widget? suffix;
   final String labelText;
+  final bool readOnly;
   final void Function(String)? onChanged;
 
   CustomTextFormField({
     super.key,
     this.suffix,
     this.onChanged,
+    this.readOnly = true,
     required this.labelText,
     required this.hintText,
     required this.keyboardType,
@@ -35,6 +37,7 @@ class CustomTextFormField extends StatelessWidget {
         10.verticalSpace,
         10.verticalSpace,
         TextFormField(
+          readOnly: readOnly,
           onChanged: onChanged,
           cursorColor: Colors.black,
           keyboardType: keyboardType,

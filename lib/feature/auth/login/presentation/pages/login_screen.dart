@@ -58,6 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Column(
                     children: [
                       CustomTextFormField(
+                        readOnly: false,
                         labelText: 'Email',
                         hintText: 'Enter your Email',
                         keyboardType: TextInputType.emailAddress,
@@ -76,6 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       15.verticalSpace,
                       CustomTextFormField(
+                        readOnly: false,
                         labelText: 'Password',
                         hintText: 'Enter your password',
                         keyboardType: TextInputType.visiblePassword,

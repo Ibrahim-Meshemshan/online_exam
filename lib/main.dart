@@ -7,6 +7,7 @@ import 'core/di/di.dart';
 import 'core/utils/sharedpreferences.dart';
 import 'feature/app/presentation/pages/home_screen.dart';
 import 'feature/auth/confirmation/presentation/pages/forget_password_screen.dart';
+import 'feature/auth/edit_profile/presentation/page/change_password.dart';
 import 'feature/auth/login/presentation/pages/login_screen.dart';
 import 'feature/auth/register/presentation/pages/register_screen.dart';
 
@@ -50,6 +51,7 @@ class Online_Exam extends StatelessWidget {
             ForgetPasswordScreen.routeName: (context) => const ForgetPasswordScreen(),
             RegisterScreen.routeName: (context) => const RegisterScreen(),
             EditProfileScreen.routeName: (context) =>  EditProfileScreen(),
+            ChangePassword.routeName: (context) =>  ChangePassword(),
           },
         );
       },

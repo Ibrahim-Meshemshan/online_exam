@@ -20,6 +20,10 @@ import '../../feature/auth/edit_profile/data/repository/profile_repo_impl.dart'
     as _i175;
 import '../../feature/auth/edit_profile/domain/repository/profile_repo.dart'
     as _i960;
+import '../../feature/auth/edit_profile/domain/use_case/change_password_use_case.dart'
+    as _i992;
+import '../../feature/auth/edit_profile/domain/use_case/edit_profile_use_case.dart'
+    as _i721;
 import '../../feature/auth/edit_profile/domain/use_case/get_profile_use_case.dart'
     as _i34;
 import '../../feature/auth/edit_profile/presentation/cubit/profile_view_model_cubit.dart'
@@ -72,16 +76,23 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i811.RegisterRepoImpl(gh<_i1053.ContractDataSource>()));
     gh.factory<_i218.AuthRepo>(() => _i394.AuthRepoImpl(
         remoteDataSourceContract: gh<_i732.RemoteDataSourceContract>()));
+    gh.factory<_i721.EditProfileUseCase>(
+        () => _i721.EditProfileUseCase(profileRepo: gh<_i960.ProfileRepo>()));
     gh.factory<_i34.GetProfileUseCase>(
         () => _i34.GetProfileUseCase(profileRepo: gh<_i960.ProfileRepo>()));
+    gh.factory<_i992.ChangePasswordUseCase>(() =>
+        _i992.ChangePasswordUseCase(profileRepo: gh<_i960.ProfileRepo>()));
     gh.factory<_i763.LoginUseCase>(
         () => _i763.LoginUseCase(authRepo: gh<_i218.AuthRepo>()));
     gh.factory<_i644.AuthViewModelCubit>(
         () => _i644.AuthViewModelCubit(loginUseCase: gh<_i763.LoginUseCase>()));
-    gh.factory<_i96.ProfileViewModelCubit>(() =>
-        _i96.ProfileViewModelCubit(getProfile: gh<_i34.GetProfileUseCase>()));
     gh.factory<_i194.RegisterUseCase>(
         () => _i194.RegisterUseCase(gh<_i516.RegisterRepo>()));
+    gh.factory<_i96.ProfileViewModelCubit>(() => _i96.ProfileViewModelCubit(
+          getProfile: gh<_i34.GetProfileUseCase>(),
+          editProfileUseCase: gh<_i721.EditProfileUseCase>(),
+          changePasswordUseCase: gh<_i992.ChangePasswordUseCase>(),
+        ));
     gh.factory<_i469.RegisterCubit>(() =>
         _i469.RegisterCubit(registerUseCase: gh<_i194.RegisterUseCase>()));
     return this;

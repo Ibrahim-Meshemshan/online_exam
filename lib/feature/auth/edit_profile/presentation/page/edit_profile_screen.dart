@@ -46,15 +46,16 @@ class EditProfileScreen extends StatelessWidget {
                         backgroundImage: AssetImage('assets/images/Photo.png'),
                       ),
                       CustomTextFormField(
+                        readOnly: true,
                         labelText: 'User name',
                         hintText: viewModel.profile?.username ?? '',
                         keyboardType: TextInputType.name,
                         controller: viewModel.userNameController,
                         validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return 'enter valid user name';
-                          }
-                          return null;
+                          // if (value == null || value.trim().isEmpty) {
+                          //   return 'enter valid user name';
+                          // }
+                          // return null;
                         },
                         onChanged: (value) {
                           viewModel.isButtonEnabled.value = true;
@@ -64,15 +65,16 @@ class EditProfileScreen extends StatelessWidget {
                         children: [
                           Expanded(
                             child: CustomTextFormField(
+                              readOnly: true,
                               labelText: 'First name',
                               hintText: viewModel.profile?.firstName ?? '',
                               keyboardType: TextInputType.name,
                               controller: viewModel.firstNameController,
                               validator: (value) {
-                                if (value == null || value.trim().isEmpty) {
-                                  return 'enter valid first name';
-                                }
-                                return null;
+                                // if (value == null || value.trim().isEmpty) {
+                                //   return 'enter valid first name';
+                                // }
+                                // return null;
                               },
                               onChanged: (value) {
                                 viewModel.isButtonEnabled.value = true;
@@ -82,6 +84,7 @@ class EditProfileScreen extends StatelessWidget {
                           10.horizontalSpace,
                           Expanded(
                             child: CustomTextFormField(
+                              readOnly: false,
                               labelText: 'Last name',
                               hintText: viewModel.profile?.lastName ?? '',
                               keyboardType: TextInputType.name,
@@ -101,62 +104,64 @@ class EditProfileScreen extends StatelessWidget {
                       ),
                       10.verticalSpace,
                       CustomTextFormField(
+                        readOnly: true,
                         labelText: 'Email',
                         hintText: viewModel.profile?.email ?? '',
                         keyboardType: TextInputType.name,
                         controller: viewModel.emailController,
                         validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return 'enter valid email';
-                          }
-                          return null;
+                          // if (value == null || value.trim().isEmpty) {
+                          //   return 'enter valid email';
+                          // }
+                          // return null;
                         },
                         onChanged: (value) {
                           viewModel.isButtonEnabled.value = true;
                         },
                       ),
                       CustomTextFormField(
+                        readOnly: true,
                         labelText: 'Password',
                         hintText: '********',
                         suffix: InkWell(
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ChangePassword(),
-                              ),
-                            );
+                            Navigator.pushNamed(context, ChangePassword.routeName);
                           },
                           child: Text(
                             'Change',
-                            style:
-                                Theme.of(context).textTheme.titleMedium?.copyWith(
-                                      color: ThemeManager.buttonColor,
-                                    ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(
+                                  color: ThemeManager.buttonColor,
+                                ),
                           ),
                         ),
                         keyboardType: TextInputType.name,
                         controller: viewModel.passwordController,
                         validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return 'enter valid password';
-                          }
-                          return null;
+                          // if (value == null || value.trim().isEmpty) {
+                          //   return 'enter valid password';
+                          // }
+                          // return null;
                         },
                         onChanged: (value) {
                           viewModel.isButtonEnabled.value = true;
                         },
                       ),
                       CustomTextFormField(
+                        readOnly: true,
                         labelText: 'Phone number',
                         hintText: viewModel.profile?.phone ?? '',
                         keyboardType: TextInputType.name,
                         controller: viewModel.phoneController,
                         validator: (value) {
-                          if (value == null || value.trim().isEmpty || value.length < 11) {
-                            return 'enter valid egypt phone number';
-                          }
-                          return null;
+                          // if (value == null ||
+                          //     value.trim().isEmpty ||
+                          //     value.length < 11) {
+                          //   return 'enter valid egypt phone number';
+                          // }
+                          // return null;
                         },
                         onChanged: (value) {
                           viewModel.isButtonEnabled.value = true;
@@ -171,13 +176,20 @@ class EditProfileScreen extends StatelessWidget {
                               CustomButton(
                                 onPressed: isEnabled
                                     ? () {
-                                        print("Updating profile...");
-                                        viewModel.isButtonEnabled.value =
-                                            false;
+                                        if (viewModel.formKey.currentState!
+                                            .validate()) {
+                                          viewModel.isButtonEnabled.value =
+                                              false;
+                                          viewModel.updateProfile(
+                                              lastName: viewModel
+                                                  .lastNameController.text);
+                                        }
                                       }
                                     : () {},
                                 text: 'Update',
-                                backgroundColor: isEnabled ? ThemeManager.buttonColor : Colors.grey,
+                                backgroundColor: isEnabled
+                                    ? ThemeManager.buttonColor
+                                    : Colors.grey,
                               ),
                             ],
                           );
