@@ -76,25 +76,25 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i811.RegisterRepoImpl(gh<_i1053.ContractDataSource>()));
     gh.factory<_i218.AuthRepo>(() => _i394.AuthRepoImpl(
         remoteDataSourceContract: gh<_i732.RemoteDataSourceContract>()));
+    gh.factory<_i992.ChangePasswordUseCase>(() =>
+        _i992.ChangePasswordUseCase(profileRepo: gh<_i960.ProfileRepo>()));
     gh.factory<_i721.EditProfileUseCase>(
         () => _i721.EditProfileUseCase(profileRepo: gh<_i960.ProfileRepo>()));
     gh.factory<_i34.GetProfileUseCase>(
         () => _i34.GetProfileUseCase(profileRepo: gh<_i960.ProfileRepo>()));
-    gh.factory<_i992.ChangePasswordUseCase>(() =>
-        _i992.ChangePasswordUseCase(profileRepo: gh<_i960.ProfileRepo>()));
     gh.factory<_i763.LoginUseCase>(
         () => _i763.LoginUseCase(authRepo: gh<_i218.AuthRepo>()));
     gh.factory<_i644.AuthViewModelCubit>(
         () => _i644.AuthViewModelCubit(loginUseCase: gh<_i763.LoginUseCase>()));
-    gh.factory<_i194.RegisterUseCase>(
-        () => _i194.RegisterUseCase(gh<_i516.RegisterRepo>()));
+    gh.factory<_i194.RegisterUsecase>(
+        () => _i194.RegisterUsecase(gh<_i516.RegisterRepo>()));
+    gh.factory<_i469.RegisterCubit>(
+        () => _i469.RegisterCubit(gh<_i194.RegisterUsecase>()));
     gh.factory<_i96.ProfileViewModelCubit>(() => _i96.ProfileViewModelCubit(
           getProfile: gh<_i34.GetProfileUseCase>(),
           editProfileUseCase: gh<_i721.EditProfileUseCase>(),
           changePasswordUseCase: gh<_i992.ChangePasswordUseCase>(),
         ));
-    gh.factory<_i469.RegisterCubit>(() =>
-        _i469.RegisterCubit(registerUseCase: gh<_i194.RegisterUseCase>()));
     return this;
   }
 }

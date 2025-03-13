@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:online_exam/core/di/di.dart';
+import 'package:online_exam/core/utils/dialog.dart';
+import 'package:online_exam/core/utils/theme_manager.dart';
 import 'package:online_exam/feature/app/presentation/pages/home_screen.dart';
-import '../../../../../core/di/di.dart';
-import '../../../../../core/utils/dialog.dart';
-import '../../../../../core/utils/theme_manager.dart';
-import '../../../login/presentation/widgets/custom_text_form_field.dart';
-import '../cubit/register_cubit.dart';
+import 'package:online_exam/feature/auth/login/presentation/widgets/custom_text_form_field.dart';
+import 'package:online_exam/feature/auth/register/presentation/cubit/register_cubit.dart';
+import 'package:online_exam/feature/auth/register/presentation/widget/register_form.dart';
+
 
 class RegisterScreen extends StatefulWidget {
   static const String routeName = 'register_screen';
-
   const RegisterScreen({super.key});
 
   @override
@@ -51,7 +52,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: Column(
                       children: [
                         CustomTextFormField(
-                          readOnly: false,
                           controller: viewModel.userNameController,
                           labelText: "Username",
                           hintText: "Enter your username",
@@ -65,7 +65,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           children: [
                             Expanded(
                               child: CustomTextFormField(
-                                readOnly: false,
                                 controller: viewModel.firstNameController,
                                 labelText: "First Name",
                                 hintText: "Enter first name",
@@ -78,7 +77,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             10.horizontalSpace,
                             Expanded(
                               child: CustomTextFormField(
-                                readOnly: false,
                                 controller: viewModel.lastNameController,
                                 labelText: "Last Name",
                                 hintText: "Enter last name",
@@ -91,7 +89,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         15.verticalSpace,
                         CustomTextFormField(
-                          readOnly: false,
                           controller: viewModel.emailController,
                           labelText: "Email",
                           hintText: "Enter your Email",
@@ -106,7 +103,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           children: [
                             Expanded(
                               child: CustomTextFormField(
-                                readOnly: false,
                                 controller: viewModel.passwordController,
                                 labelText: "Password",
                                 hintText: "Enter Password",
@@ -133,8 +129,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             10.horizontalSpace,
                             Expanded(
                               child: CustomTextFormField(
-                                readOnly: false,
-                                controller: viewModel.rePasswordController,
+                                controller: viewModel.repasswordController,
                                 labelText: "Confirm password",
                                 hintText: "Confirm password",
                                 keyboardType: TextInputType.visiblePassword,
@@ -162,7 +157,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         15.verticalSpace,
                         CustomTextFormField(
-                          readOnly: false,
                           controller: viewModel.phoneController,
                           labelText: "Phone number",
                           hintText: "Enter your Phone number",
@@ -219,4 +213,3 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 }
-//git config --global --add safe.directory "C:/المسار_الكامل_لمجلد_المشروع"
