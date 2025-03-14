@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:online_exam/feature/auth/login/presentation/widgets/custom_button.dart';
 import '../../../../../core/di/di.dart';
 import '../../../../../core/utils/dialog.dart';
 import '../../../../../core/utils/sharedpreferences.dart';
@@ -25,7 +26,6 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => getIt<AuthViewModelCubit>(),
-
       child: Builder(
         builder: (context) {
           final viewModel = context.read<AuthViewModelCubit>();
@@ -35,26 +35,22 @@ class _LoginScreenState extends State<LoginScreen> {
             body: BlocListener<AuthViewModelCubit, AuthViewModelState>(
               listener: (context, state) {
                 if (state.loginState == Status.loading) {
-                
                   DialogUtils.showLoading(context, 'Loading ...');
-               
                 } else {
-                
                   DialogUtils.hideLoading(context);
-                 
+
                   if (state.loginState == Status.error) {
-                
                     DialogUtils.showMessage(
                         context, state.errorMessage ?? 'Login failed');
                   } else if (state.loginState == Status.success) {
-                    Shared.saveData(key: 'Token',value: state.loginResponseEntity?.token);
-                    
+                    Shared.saveData(
+                        key: 'Token', value: state.loginResponseEntity?.token);
+
                     Navigator.pushReplacementNamed(
                         context, HomeScreen.routeName);
                   }
                 }
               },
-
               child: Padding(
                 padding: EdgeInsets.all(16.sp),
                 child: Form(
@@ -62,6 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Column(
                     children: [
                       CustomTextFormField(
+                        readOnly: false,
                         labelText: 'Email',
                         hintText: 'Enter your Email',
                         keyboardType: TextInputType.emailAddress,
@@ -80,6 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       15.verticalSpace,
                       CustomTextFormField(
+                        readOnly: false,
                         labelText: 'Password',
                         hintText: 'Enter your password',
                         keyboardType: TextInputType.visiblePassword,
@@ -132,10 +130,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: const Text(
                               'Forget Password?',
                               style: TextStyle(
-                                  decoration: TextDecoration.underline,
-                                  decorationThickness: 1.5,
-                                  color: Colors.black,
-                                  fontSize: 14),
+                                decoration: TextDecoration.underline,
+                                decorationThickness: 1.5,
+                                color: Colors.black,
+                                fontSize: 14,
+                              ),
                             ),
                           ),
                         ],
@@ -143,16 +142,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       50.verticalSpace,
                       Row(
                         children: [
-                          Expanded(
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: ThemeManager.buttonColor,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(25.r)),
-                                padding: EdgeInsets.all(14.sp),
-                              ),
+                          CustomButton(
                               onPressed: () {
-
                                 if (viewModel.formKey.currentState!
                                     .validate()) {
                                   viewModel.login(
@@ -161,14 +152,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   );
                                 }
                               },
-                              child: Text(
-                                'Login',
-                                style: ThemeManager
-                                    .appTheme.textTheme.titleSmall
-                                    ?.copyWith(fontWeight: FontWeight.w900),
-                              ),
-                            ),
-                          ),
+                              text: 'Login'),
                         ],
                       ),
                       10.verticalSpace,
@@ -192,7 +176,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                   color: ThemeManager.buttonColor),
                             ),
                           ),
-
                         ],
                       ),
                     ],

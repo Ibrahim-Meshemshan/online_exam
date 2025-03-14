@@ -17,10 +17,10 @@ class RemoteDataSourceImpl implements RemoteDataSourceContract {
   Future<Either<Failures, LoginResponseEntity>> login(
       String email, String password) async {
     var either = await apiManager.login(email, password);
-    
+
     return either.fold(
-          (failure) => Left(failure),
-          (response) => Right(response),
+      (failure) => Left(failure),
+      (response) => Right(response),
     );
   }
 }

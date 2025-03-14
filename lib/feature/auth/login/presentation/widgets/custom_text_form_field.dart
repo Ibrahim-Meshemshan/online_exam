@@ -10,10 +10,16 @@ class CustomTextFormField extends StatelessWidget {
   final String? Function(String?)? validator;
   final bool isObscure;
   final TextInputType keyboardType;
-  String labelText;
+  final Widget? suffix;
+  final String labelText;
+  final bool readOnly;
+  final void Function(String)? onChanged;
 
   CustomTextFormField({
     super.key,
+    this.suffix,
+    this.onChanged,
+    this.readOnly = true,
     required this.labelText,
     required this.hintText,
     required this.keyboardType,
@@ -31,16 +37,19 @@ class CustomTextFormField extends StatelessWidget {
         10.verticalSpace,
         10.verticalSpace,
         TextFormField(
+          readOnly: readOnly,
+          onChanged: onChanged,
           cursorColor: Colors.black,
           keyboardType: keyboardType,
           obscureText: isObscure,
           validator: validator,
           controller: controller,
           decoration: InputDecoration(
+            suffix: suffix,
             labelText: labelText,
             hintText: hintText,
             hintStyle: const TextStyle(
-                fontSize: 14,
+                fontSize: 18,
                 color: Color(0xffa6a6a6),
                 fontWeight: FontWeight.w400),
             labelStyle: TextStyle(color: ThemeManager.blackColor),

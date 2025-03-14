@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:online_exam/feature/auth/edit_profile/presentation/page/edit_profile_screen.dart';
 
 import 'core/di/di.dart';
 import 'core/utils/sharedpreferences.dart';
 import 'feature/app/presentation/pages/home_screen.dart';
 import 'feature/auth/confirmation/presentation/pages/forget_password_screen.dart';
+import 'feature/auth/edit_profile/presentation/page/change_password.dart';
 import 'feature/auth/login/presentation/pages/login_screen.dart';
 import 'feature/auth/register/presentation/pages/register_screen.dart';
 
@@ -42,12 +44,14 @@ class Online_Exam extends StatelessWidget {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           home: const LoginScreen(),
-          initialRoute: LoginScreen.routeName,
+          initialRoute: EditProfileScreen.routeName,
           routes: {
             LoginScreen.routeName: (context) => const LoginScreen(),
             HomeScreen.routeName: (context) => const HomeScreen(),
             ForgetPasswordScreen.routeName: (context) => const ForgetPasswordScreen(),
             RegisterScreen.routeName: (context) => const RegisterScreen(),
+            EditProfileScreen.routeName: (context) =>  EditProfileScreen(),
+            ChangePassword.routeName: (context) =>  ChangePassword(),
           },
         );
       },
@@ -56,3 +60,4 @@ class Online_Exam extends StatelessWidget {
 }
 
 //flutter packages pub run build_runner watch
+//flutter packages pub run build_runner build
