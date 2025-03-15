@@ -5,5 +5,5 @@ class Constant {
   static const String profileEndpoint = 'profileData';
   static const String editProfileEndpoint = 'editProfile';
   static const String changePasswordEndpoint = 'changePassword';
-  static const String token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZDM0MDE5NTU1NGIzMjg5MTI2YTE4YyIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQxODk3Nzc3fQ.lSOl2aAU3SvhopB1qR9Sne453WjJvtlCyjLFkf2qtVw';
+  static const String token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZDVmNGIzNTU1NGIzMjg5MTI2ZjBjMSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQyMDc1MDYwfQ.Hh-gcHxZdCnm56IGNYoI54WZoPsU52LTugGEOOWGx8I';
 }
