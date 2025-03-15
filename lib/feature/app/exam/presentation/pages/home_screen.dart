@@ -1,13 +1,14 @@
 
 import 'package:flutter/material.dart';
 
-class HomeBody extends StatelessWidget {
-  const HomeBody({super.key});
+class HomeScreen extends StatelessWidget {
+  static const String routeName = 'home_screen';
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green,
+
     );
   }
 }

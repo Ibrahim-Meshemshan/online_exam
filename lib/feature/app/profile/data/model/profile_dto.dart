@@ -1,4 +1,5 @@
-import 'package:online_exam/feature/auth/edit_profile/domain/entity/profile_entity.dart';
+
+import '../../domain/entity/profile_entity.dart';
 
 class ProfileDto extends ProfileEntity {
   ProfileDto({
@@ -12,7 +13,7 @@ class ProfileDto extends ProfileEntity {
   }
 }
 
-class UserDto extends UserEntity {
+class UserDto extends UserEntityProfile {
   UserDto({
     super.id,
     super.username,

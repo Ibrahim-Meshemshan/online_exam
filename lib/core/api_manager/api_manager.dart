@@ -1,20 +1,18 @@
-import 'dart:convert';
-
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 
 import 'package:injectable/injectable.dart';
-import 'package:online_exam/feature/auth/edit_profile/data/model/change_password_dto.dart';
-import 'package:online_exam/feature/auth/edit_profile/data/model/profile_dto.dart';
+
 
 import '../../config/constant.dart';
+import '../../feature/app/profile/data/model/change_password_dto.dart';
+import '../../feature/app/profile/data/model/profile_dto.dart';
 import '../../feature/auth/login/data/models/request/login_request.dart';
 import '../../feature/auth/login/data/models/response/login_response_model_Dto.dart';
 import '../../feature/auth/register/data/models/register_requst_model.dart';
 import '../../feature/auth/register/data/models/register_response_model.dart';
 import '../utils/failures.dart';
-import '../utils/sharedpreferences.dart';
 
 @singleton
 class ApiManager {
@@ -199,12 +197,14 @@ class ApiManager {
             ),
           );
 
-          var changePasswordResponse = ChangePasswordDto.fromJson(response.data);
+          var changePasswordResponse =
+              ChangePasswordDto.fromJson(response.data);
 
           if (response.statusCode! >= 200 && response.statusCode! < 300) {
             return Right(changePasswordResponse);
           } else {
-            return Left(ServerError(errorMessage: changePasswordResponse.message));
+            return Left(
+                ServerError(errorMessage: changePasswordResponse.message));
           }
         } on DioException catch (e) {
           print('DioException: ${e.response?.statusCode}, ${e.response?.data}');

@@ -2,15 +2,17 @@ import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 import 'package:online_exam/core/api_manager/api_manager.dart';
 import 'package:online_exam/core/utils/failures.dart';
-import 'package:online_exam/feature/auth/edit_profile/data/data_source/contract/remote_data_source_contract.dart';
-import 'package:online_exam/feature/auth/edit_profile/domain/entity/change_password_entity.dart';
-import 'package:online_exam/feature/auth/edit_profile/domain/entity/profile_entity.dart';
+import 'package:online_exam/feature/app/profile/data/data_source/contract/remote_data_source_contract.dart';
 
-@Singleton(as: RemoteDataSourceContract)
-class RemoteDataSourceImpl implements RemoteDataSourceContract {
+import '../../../domain/entity/change_password_entity.dart';
+import '../../../domain/entity/profile_entity.dart';
+
+
+@Singleton(as: RemoteDataSourceContractProfile)
+class RemoteDataSourceProfileImpl implements RemoteDataSourceContractProfile {
   ApiManager apiManager;
 
-  RemoteDataSourceImpl({required this.apiManager});
+  RemoteDataSourceProfileImpl({required this.apiManager});
 
   @override
   Future<Either<Failures, ProfileEntity>> getProfile() async {

@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:online_exam/core/di/di.dart';
 import 'package:online_exam/core/utils/dialog.dart';
 import 'package:online_exam/core/utils/theme_manager.dart';
-import 'package:online_exam/feature/app/presentation/pages/home_screen.dart';
+import 'package:online_exam/feature/app/exam/presentation/pages/home_screen.dart';
 import 'package:online_exam/feature/auth/login/presentation/widgets/custom_text_form_field.dart';
 import 'package:online_exam/feature/auth/register/presentation/cubit/register_cubit.dart';
 import 'package:online_exam/feature/auth/register/presentation/widget/register_form.dart';

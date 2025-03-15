@@ -1,4 +1,5 @@
-import 'package:online_exam/feature/auth/edit_profile/domain/entity/change_password_entity.dart';
+
+import '../../domain/entity/change_password_entity.dart';
 
 class ChangePasswordDto extends ChangePasswordEntity {
   ChangePasswordDto({

@@ -5,11 +5,11 @@ class ProfileEntity {
   });
 
   String? message;
-  UserEntity? user;
+  UserEntityProfile? user;
 }
 
-class UserEntity {
-  UserEntity({
+class UserEntityProfile {
+  UserEntityProfile({
     this.id,
     this.username,
     this.firstName,

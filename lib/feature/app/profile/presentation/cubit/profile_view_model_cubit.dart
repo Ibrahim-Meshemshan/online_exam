@@ -2,11 +2,14 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
 import 'package:online_exam/core/utils/failures.dart';
-import 'package:online_exam/feature/auth/edit_profile/domain/entity/change_password_entity.dart';
-import 'package:online_exam/feature/auth/edit_profile/domain/entity/profile_entity.dart';
-import 'package:online_exam/feature/auth/edit_profile/domain/use_case/change_password_use_case.dart';
-import 'package:online_exam/feature/auth/edit_profile/domain/use_case/edit_profile_use_case.dart';
-import 'package:online_exam/feature/auth/edit_profile/domain/use_case/get_profile_use_case.dart';
+
+
+import '../../../../auth/login/domain/entities/login_response_entity.dart';
+import '../../domain/entity/change_password_entity.dart';
+import '../../domain/entity/profile_entity.dart';
+import '../../domain/use_case/change_password_use_case.dart';
+import '../../domain/use_case/edit_profile_use_case.dart';
+import '../../domain/use_case/get_profile_use_case.dart';
 
 part 'profile_view_model_state.dart';
 
@@ -38,7 +41,7 @@ class ProfileViewModelCubit extends Cubit<ProfileViewModelState> {
   TextEditingController rePasswordController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
 
-  UserEntity? profile;
+  UserEntityProfile ? profile;
   
   bool checkValidEmail(String? email) {
     if (email == null) return false;
