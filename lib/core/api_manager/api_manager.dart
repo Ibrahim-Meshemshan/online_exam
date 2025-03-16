@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 
 import 'package:injectable/injectable.dart';
+import 'package:online_exam/feature/app/explore/data/models/all_exam_dto.dart';
 
 
 import '../../config/constant.dart';
@@ -209,6 +210,47 @@ class ApiManager {
         } on DioException catch (e) {
           print('DioException: ${e.response?.statusCode}, ${e.response?.data}');
           final errorMessage = e.response?.data?["message"] ??
+              e.message ??
+              "An unexpected error occurred";
+          return Left(NetworkError(errorMessage: errorMessage));
+        }
+      } else {
+        print('Connectivity Result: $connectivityResult');
+        //no internet connection
+        return Left(
+          NetworkError(errorMessage: 'please check internet connection'),
+        );
+      }
+    }
+  }
+  Future<Either<Failures, AllExamDto>> getAllExam() async {
+    {
+      final List<ConnectivityResult> connectivityResult =
+      await (Connectivity().checkConnectivity());
+
+      if (connectivityResult.contains(ConnectivityResult.mobile) ||
+          connectivityResult.contains(ConnectivityResult.wifi)) {
+        try {
+          final response = await dio.get(
+            Constant.baseUrlExam + Constant.getAllExamEndpoint,
+            options: Options(
+              headers: {
+                "token": Constant.token,
+              },
+            ),
+          );
+          print("Response Data: ${response.data}");
+
+          var profileResponse = AllExamDto.fromJson(response.data);
+
+          if (response.statusCode! >= 200 && response.statusCode! < 300) {
+            return Right(profileResponse);
+          } else {
+            return Left(ServerError(errorMessage: profileResponse.message));
+          }
+        } on DioException catch (e) {
+          print('DioException: ${e.response?.statusCode}, ${e.response?.data}');
+          final errorMessage = e.response?.data?["message"].toString() ??
               e.message ??
               "An unexpected error occurred";
           return Left(NetworkError(errorMessage: errorMessage));

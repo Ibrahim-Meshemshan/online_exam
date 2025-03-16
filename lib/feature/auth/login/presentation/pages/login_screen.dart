@@ -6,7 +6,7 @@ import '../../../../../core/di/di.dart';
 import '../../../../../core/utils/dialog.dart';
 import '../../../../../core/utils/sharedpreferences.dart';
 import '../../../../../core/utils/theme_manager.dart';
-import '../../../../app/exam/presentation/pages/home_screen.dart';
+import '../../../../app/explore/presentation/pages/home_screen.dart';
 import '../../../confirmation/presentation/pages/forget_password_screen.dart';
 import '../../../register/presentation/pages/register_screen.dart';
 import '../cubit/login_view_model_cubit.dart';

@@ -12,6 +12,16 @@
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
+import '../../feature/app/explore/data/data_sources/remote_data_source_exam_contract.dart'
+    as _i665;
+import '../../feature/app/explore/data/data_sources/remote_data_source_exam_impl.dart'
+    as _i303;
+import '../../feature/app/explore/data/repositories/exam_repo_impl.dart'
+    as _i368;
+import '../../feature/app/explore/domain/repositories/exam_repo.dart' as _i449;
+import '../../feature/app/explore/domain/use_cases/get_all_exam_use_case.dart'
+    as _i9;
+import '../../feature/app/explore/presentation/cubit/exam_cubit.dart' as _i168;
 import '../../feature/app/profile/data/data_source/contract/remote_data_source_contract.dart'
     as _i937;
 import '../../feature/app/profile/data/data_source/remote/remote_data_source_impl.dart'
@@ -67,6 +77,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i447.RemoteDataSourceImpl(apiManager: gh<_i266.ApiManager>()));
     gh.singleton<_i937.RemoteDataSourceContractProfile>(() =>
         _i650.RemoteDataSourceProfileImpl(apiManager: gh<_i266.ApiManager>()));
+    gh.factory<_i665.RemoteDataSourceExamContract>(() =>
+        _i303.RemoteDataSourceExamImpl(apiManager: gh<_i266.ApiManager>()));
     gh.factory<_i682.ProfileRepo>(() => _i233.ProfileRepoImpl(
         remoteDataSourceContract: gh<_i937.RemoteDataSourceContractProfile>()));
     gh.factory<_i443.ChangePasswordUseCase>(() =>
@@ -90,6 +102,13 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i763.LoginUseCase(authRepo: gh<_i218.AuthRepo>()));
     gh.factory<_i644.AuthViewModelCubit>(
         () => _i644.AuthViewModelCubit(loginUseCase: gh<_i763.LoginUseCase>()));
+    gh.factory<_i449.ExamRepo>(() => _i368.ExamRepoImpl(
+        remoteDataSourceExamContract:
+            gh<_i665.RemoteDataSourceExamContract>()));
+    gh.factory<_i9.GetAllExamUseCase>(
+        () => _i9.GetAllExamUseCase(examRepo: gh<_i449.ExamRepo>()));
+    gh.factory<_i168.ExamCubit>(
+        () => _i168.ExamCubit(getAllExamUseCase: gh<_i9.GetAllExamUseCase>()));
     gh.factory<_i194.RegisterUsecase>(
         () => _i194.RegisterUsecase(gh<_i516.RegisterRepo>()));
     gh.factory<_i469.RegisterCubit>(

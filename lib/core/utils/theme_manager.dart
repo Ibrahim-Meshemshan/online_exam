@@ -4,10 +4,13 @@ class ThemeManager {
   static Color whiteColor = const Color(0xffffffff);
   static Color blackColor = const Color(0xff000000);
   static Color buttonColor = const Color(0xff02369c);
+  static Color containerColor = const Color(0xfff9f9f9);
 
   static ThemeData appTheme = ThemeData(
+
     scaffoldBackgroundColor: whiteColor,
     appBarTheme: AppBarTheme(
+      backgroundColor: Colors.transparent,
         titleTextStyle: TextStyle(
             color: blackColor, fontSize: 20, fontWeight: FontWeight.w500),
         iconTheme: IconThemeData(color: blackColor)),
