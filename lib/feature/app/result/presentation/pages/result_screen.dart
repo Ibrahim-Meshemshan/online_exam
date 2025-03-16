@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:online_exam/core/utils/theme_manager.dart';
 import 'package:online_exam/feature/app/result/presentation/widgets/custom_result_item.dart';
 
+import 'answers_screen.dart';
+
 class ResultScreen extends StatelessWidget {
   const ResultScreen({super.key});
 

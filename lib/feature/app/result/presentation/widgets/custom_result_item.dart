@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:online_exam/feature/app/result/presentation/pages/answers_screen.dart';
 
 class CustomResultItem extends StatelessWidget {
    CustomResultItem({super.key,required this.text});
@@ -15,7 +16,7 @@ class CustomResultItem extends StatelessWidget {
         itemBuilder: (context, index) {
           return InkWell(
             onTap: () {
-
+              Navigator.pushNamed(context, AnswersScreen.routeName);
             },
             child: Container(
               margin: EdgeInsets.all(5.sp),
