@@ -19,8 +19,10 @@ import '../../feature/app/explore/data/data_sources/remote_data_source_exam_impl
 import '../../feature/app/explore/data/repositories/exam_repo_impl.dart'
     as _i368;
 import '../../feature/app/explore/domain/repositories/exam_repo.dart' as _i449;
-import '../../feature/app/explore/domain/use_cases/get_all_exam_use_case.dart'
-    as _i9;
+import '../../feature/app/explore/domain/use_cases/get_all_exam_on_subject_use_case.dart'
+    as _i630;
+import '../../feature/app/explore/domain/use_cases/get_all_subject_use_case.dart'
+    as _i617;
 import '../../feature/app/explore/presentation/cubit/exam_cubit.dart' as _i168;
 import '../../feature/app/profile/data/data_source/contract/remote_data_source_contract.dart'
     as _i937;
@@ -105,10 +107,14 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i449.ExamRepo>(() => _i368.ExamRepoImpl(
         remoteDataSourceExamContract:
             gh<_i665.RemoteDataSourceExamContract>()));
-    gh.factory<_i9.GetAllExamUseCase>(
-        () => _i9.GetAllExamUseCase(examRepo: gh<_i449.ExamRepo>()));
-    gh.factory<_i168.ExamCubit>(
-        () => _i168.ExamCubit(getAllExamUseCase: gh<_i9.GetAllExamUseCase>()));
+    gh.factory<_i617.GetAllSubjectEntity>(
+        () => _i617.GetAllSubjectEntity(examRepo: gh<_i449.ExamRepo>()));
+    gh.factory<_i630.GetAllExamOnSubjectUseCase>(
+        () => _i630.GetAllExamOnSubjectUseCase(examRepo: gh<_i449.ExamRepo>()));
+    gh.factory<_i168.ExamCubit>(() => _i168.ExamCubit(
+          getAllExamOnSubjectUseCase: gh<_i630.GetAllExamOnSubjectUseCase>(),
+          getAllSubjectEntity: gh<_i617.GetAllSubjectEntity>(),
+        ));
     gh.factory<_i194.RegisterUsecase>(
         () => _i194.RegisterUsecase(gh<_i516.RegisterRepo>()));
     gh.factory<_i469.RegisterCubit>(

@@ -14,7 +14,7 @@ class HomeBody extends StatefulWidget {
 }
 
 class _HomeBodyState extends State<HomeBody> {
-  final ValueNotifier<int> _selectedIndex = ValueNotifier<int>(1);
+  final ValueNotifier<int> _selectedIndex = ValueNotifier<int>(0);
 
   static final List<Widget> _pages = <Widget>[
     HomeScreen(),

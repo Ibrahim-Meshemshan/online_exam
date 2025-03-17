@@ -3,10 +3,11 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 
 import 'package:injectable/injectable.dart';
-import 'package:online_exam/feature/app/explore/data/models/all_exam_dto.dart';
 
+import 'package:online_exam/feature/app/explore/data/models/all_subject_dto.dart';
 
 import '../../config/constant.dart';
+import '../../feature/app/explore/data/models/all_exam_on_subject_dto.dart';
 import '../../feature/app/profile/data/model/change_password_dto.dart';
 import '../../feature/app/profile/data/model/profile_dto.dart';
 import '../../feature/auth/login/data/models/request/login_request.dart';
@@ -223,16 +224,58 @@ class ApiManager {
       }
     }
   }
-  Future<Either<Failures, AllExamDto>> getAllExam() async {
+
+  Future<Either<Failures, AllSubjectDto>> getAllSubject() async {
     {
       final List<ConnectivityResult> connectivityResult =
-      await (Connectivity().checkConnectivity());
+          await (Connectivity().checkConnectivity());
 
       if (connectivityResult.contains(ConnectivityResult.mobile) ||
           connectivityResult.contains(ConnectivityResult.wifi)) {
         try {
           final response = await dio.get(
-            Constant.baseUrlExam + Constant.getAllExamEndpoint,
+            Constant.baseUrlExam + Constant.getAllSubjectEndpoint,
+            options: Options(
+              headers: {
+                "token": Constant.token,
+              },
+            ),
+          );
+          var getAllSubjectResponse = AllSubjectDto.fromJson(response.data);
+          if (response.statusCode! >= 200 && response.statusCode! < 300) {
+            return Right(getAllSubjectResponse);
+          } else {
+            return Left(ServerError(errorMessage: getAllSubjectResponse.message));
+          }
+        } on DioException catch (e) {
+          print('DioException: ${e.response?.statusCode}, ${e.response?.data}');
+          final errorMessage = e.response?.data?["message"].toString() ??
+              e.message ??
+              "An unexpected error occurred";
+          return Left(NetworkError(errorMessage: errorMessage));
+        }
+      } else {
+        print('Connectivity Result: $connectivityResult');
+        //no internet connection
+        return Left(
+          NetworkError(errorMessage: 'please check internet connection'),
+        );
+      }
+    }
+  }
+
+  Future<Either<Failures, AllExamOnSubjectDto>> getAllExamOnSubject(
+      String subjectId) async {
+    {
+      final List<ConnectivityResult> connectivityResult =
+          await (Connectivity().checkConnectivity());
+
+      if (connectivityResult.contains(ConnectivityResult.mobile) ||
+          connectivityResult.contains(ConnectivityResult.wifi)) {
+        try {
+          final response = await dio.get(
+            Constant.baseUrlExam + Constant.getAllExamOnSubjectEndpoint,
+            queryParameters: {"subject=": subjectId},
             options: Options(
               headers: {
                 "token": Constant.token,
@@ -241,12 +284,12 @@ class ApiManager {
           );
           print("Response Data: ${response.data}");
 
-          var profileResponse = AllExamDto.fromJson(response.data);
+          var allExamOnSubject = AllExamOnSubjectDto.fromJson(response.data);
 
           if (response.statusCode! >= 200 && response.statusCode! < 300) {
-            return Right(profileResponse);
+            return Right(allExamOnSubject);
           } else {
-            return Left(ServerError(errorMessage: profileResponse.message));
+            return Left(ServerError(errorMessage: allExamOnSubject.message));
           }
         } on DioException catch (e) {
           print('DioException: ${e.response?.statusCode}, ${e.response?.data}');

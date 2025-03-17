@@ -5,6 +5,8 @@ import 'package:online_exam/core/utils/theme_manager.dart';
 
 import 'core/di/di.dart';
 import 'core/utils/sharedpreferences.dart';
+import 'feature/app/explore/presentation/pages/subject_details_screen.dart';
+import 'feature/app/explore/presentation/pages/subject_screen.dart';
 import 'feature/app/explore/presentation/pages/home_screen.dart';
 import 'feature/app/home_body.dart';
 import 'feature/app/profile/presentation/page/change_password.dart';
@@ -58,6 +60,8 @@ class Online_Exam extends StatelessWidget {
             ChangePassword.routeName: (context) =>  ChangePassword(),
             HomeBody.routeName: (context) =>  HomeBody(),
             AnswersScreen.routeName: (context) =>   AnswersScreen(),
+            SubjectScreen.routeName: (context) =>   SubjectScreen(),
+            SubjectDetailsScreen.routeName: (context) =>   SubjectDetailsScreen(),
           },
         );
       },
