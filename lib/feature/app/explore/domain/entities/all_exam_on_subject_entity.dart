@@ -1,17 +1,16 @@
-class AllExamEntity {
-  AllExamEntity({
+class AllExamOnSubjectEntity {
+  AllExamOnSubjectEntity({
     this.message,
-    this.metadata,
     this.exams,
   });
 
   String? message;
-  MetadataEntity? metadata;
-  List<ExamsEntity>? exams;
+
+  List<ExamEntity>? exams;
 }
 
-class ExamsEntity {
-  ExamsEntity({
+class ExamEntity {
+  ExamEntity({
     this.id,
     this.title,
     this.duration,
@@ -28,16 +27,4 @@ class ExamsEntity {
   num? numberOfQuestions;
   bool? active;
   String? createdAt;
-}
-
-class MetadataEntity {
-  MetadataEntity({
-    this.currentPage,
-    this.numberOfPages,
-    this.limit,
-  });
-
-  num? currentPage;
-  num? numberOfPages;
-  num? limit;
 }

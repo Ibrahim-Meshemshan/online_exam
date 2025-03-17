@@ -3,11 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:online_exam/core/di/di.dart';
 import 'package:online_exam/feature/app/explore/presentation/cubit/exam_cubit.dart';
-import 'package:online_exam/feature/app/explore/presentation/cubit/exam_cubit.dart';
+import 'package:online_exam/feature/app/explore/presentation/widgets/custom_search.dart';
+import 'package:online_exam/feature/app/explore/presentation/widgets/custom_subject.dart';
 import 'package:online_exam/feature/auth/login/presentation/widgets/custom_button.dart';
 
 import '../../../../../core/utils/theme_manager.dart';
 import '../cubit/exam_state.dart';
+import 'subject_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   static const String routeName = 'home_screen';
@@ -26,45 +28,44 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
       body: BlocBuilder<ExamCubit, ExamState>(
-        bloc: viewModel..getAllExam(),
+        bloc: viewModel..getAllSubject(),
         builder: (context, state) {
-          if (state.examState == Status.loading) {
+          if (state.subjectState == Status.loading) {
             return const Center(
               child: CircularProgressIndicator(),
             );
-          } else if (state.examState == Status.error) {
-            CustomButton(onPressed: () {}, text: 'Try Again');
-          } else if (state.examState == Status.success) {
+          } else if (state.subjectState == Status.error) {
+            CustomButton(onPressed: () {}, text: 'Try Later');
+          } else if (state.subjectState == Status.success) {
             return Padding(
               padding: EdgeInsets.all(10.sp),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  const CustomSearch(),
+                  30.verticalSpace,
                   Text(
                     'Browse by Subject',
                     style: ThemeManager.appTheme.textTheme.titleMedium
                         ?.copyWith(color: Colors.black),
                   ),
+                  20.verticalSpace,
                   Expanded(
                     child: ListView.builder(
-                      itemCount: state.examEntity?.length,
+                      itemCount: state.subjectEntity?.length,
                       itemBuilder: (context, index) {
-                        return Container(
-                          margin: EdgeInsets.all(8.sp),
-                          width: double.infinity,
-                          height: 80.h,
-                          decoration: BoxDecoration(
-                            color: Colors.grey,
-                            borderRadius: BorderRadius.circular(10.r),
-                          ),
-                          child: Row(
-                            children: [
-                              Image.asset(
-                                  'assets/images/Language Translator.png'),
-                              Text(state.examEntity![index].title ?? '')
-                            ],
-                          ),
-                        );
+                        return InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(
+                                context,
+                                SubjectScreen.routeName,
+                                arguments: state.subjectEntity?[index],
+                              );
+                            },
+                            child: CustomSubject(
+                              image: state.subjectEntity![index].icon,
+                              subject: state.subjectEntity![index].name,
+                            ));
                       },
                     ),
                   ),

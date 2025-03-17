@@ -1,27 +1,45 @@
-import 'package:online_exam/feature/app/explore/domain/entities/all_exam_entity.dart';
+
+import '../../domain/entities/all_exam_on_subject_entity.dart';
+import '../../domain/entities/all_subject_entity.dart';
 
 enum Status { initial, loading, success, error }
 
 class ExamState {
-  final Status examState;
-  final String? errorExamMessage;
-  final List<ExamsEntity>? examEntity;
+
+
+  final Status examOnSubjectState;
+  final String? errorExamOnSubject;
+  final List<ExamEntity>? examOnSubjectEntity;
+
+  final Status subjectState;
+  final String? subjectError;
+  final List<SubjectEntity>? subjectEntity;
 
   const ExamState({
-    this.examState = Status.initial,
-    this.errorExamMessage,
-    this.examEntity,
+     this.examOnSubjectState = Status.initial,
+    this.errorExamOnSubject,
+    this.examOnSubjectEntity,
+     this.subjectState = Status.initial,
+    this.subjectError,
+    this.subjectEntity,
   });
 
   ExamState copyWith({
-    Status? examState,
-    String? errorExamMessage,
-    List<ExamsEntity>? examEntity,
+    Status? examOnSubjectState,
+    String? errorExamOnSubject,
+    List<ExamEntity>? examOnSubjectEntity,
+    Status? subjectState,
+    String? subjectError,
+    List<SubjectEntity>? subjectEntity,
   }) {
     return ExamState(
-      examState: examState ?? this.examState,
-      errorExamMessage: errorExamMessage ?? this.errorExamMessage,
-      examEntity: examEntity ?? this.examEntity,
+      examOnSubjectState: examOnSubjectState ?? this.examOnSubjectState,
+      errorExamOnSubject: errorExamOnSubject ?? this.errorExamOnSubject,
+      examOnSubjectEntity: examOnSubjectEntity ?? this.examOnSubjectEntity,
+      subjectState: subjectState ?? this.subjectState,
+      subjectError: subjectError ?? this.subjectError,
+      subjectEntity: subjectEntity ?? this.subjectEntity,
     );
   }
 }
+
