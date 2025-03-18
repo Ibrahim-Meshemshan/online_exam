@@ -4,15 +4,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:online_exam/core/di/di.dart';
 import 'package:online_exam/core/utils/dialog.dart';
 import 'package:online_exam/core/utils/theme_manager.dart';
+import 'package:online_exam/feature/app/home_body.dart';
 import 'package:online_exam/feature/auth/login/presentation/widgets/custom_text_form_field.dart';
 import 'package:online_exam/feature/auth/register/presentation/cubit/register_cubit.dart';
-import 'package:online_exam/feature/auth/register/presentation/widget/register_form.dart';
 
 import '../../../../app/explore/presentation/pages/home_screen.dart';
 
-
 class RegisterScreen extends StatefulWidget {
   static const String routeName = 'register_screen';
+
   const RegisterScreen({super.key});
 
   @override
@@ -40,8 +40,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     DialogUtils.showMessage(
                         context, state.errorMessage ?? 'Registration failed');
                   } else if (state is RegisterSuccess) {
-                    DialogUtils.showMessage(context, 'Registered Successfully');
                     Navigator.pop(context);
+                    Navigator.pushNamed(context, HomeBody.routeName);
                   }
                 }
               },
@@ -53,6 +53,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: Column(
                       children: [
                         CustomTextFormField(
+                          readOnly: false,
                           controller: viewModel.userNameController,
                           labelText: "Username",
                           hintText: "Enter your username",
@@ -66,6 +67,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           children: [
                             Expanded(
                               child: CustomTextFormField(
+                                readOnly: false,
                                 controller: viewModel.firstNameController,
                                 labelText: "First Name",
                                 hintText: "Enter first name",
@@ -78,6 +80,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             10.horizontalSpace,
                             Expanded(
                               child: CustomTextFormField(
+                                readOnly: false,
                                 controller: viewModel.lastNameController,
                                 labelText: "Last Name",
                                 hintText: "Enter last name",
@@ -90,6 +93,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         15.verticalSpace,
                         CustomTextFormField(
+                          readOnly: false,
                           controller: viewModel.emailController,
                           labelText: "Email",
                           hintText: "Enter your Email",
@@ -104,6 +108,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           children: [
                             Expanded(
                               child: CustomTextFormField(
+                                readOnly: false,
                                 controller: viewModel.passwordController,
                                 labelText: "Password",
                                 hintText: "Enter Password",
@@ -113,7 +118,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   onPressed: () {
                                     setState(() {
                                       viewModel.isObscurePassword =
-                                      !viewModel.isObscurePassword;
+                                          !viewModel.isObscurePassword;
                                     });
                                   },
                                   icon: Icon(
@@ -130,6 +135,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             10.horizontalSpace,
                             Expanded(
                               child: CustomTextFormField(
+                                readOnly: false,
                                 controller: viewModel.repasswordController,
                                 labelText: "Confirm password",
                                 hintText: "Confirm password",
@@ -143,7 +149,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   onPressed: () {
                                     setState(() {
                                       viewModel.isObscureConfirmPassword =
-                                      !viewModel.isObscureConfirmPassword;
+                                          !viewModel.isObscureConfirmPassword;
                                     });
                                   },
                                   icon: Icon(
@@ -158,19 +164,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         15.verticalSpace,
                         CustomTextFormField(
+                          readOnly: false,
                           controller: viewModel.phoneController,
                           labelText: "Phone number",
                           hintText: "Enter your Phone number",
                           keyboardType: TextInputType.phone,
                           validator: (value) {
-                            if(value==null || value.isEmpty){
+                            if (value == null || value.isEmpty) {
                               return 'please enter a valid phone number';
-                            }else if(value.length<11){
+                            } else if (value.length < 11) {
                               return 'enter Egypt phone number';
                             }
                             return null;
                           },
-
                         ),
                         30.verticalSpace,
                         Row(
@@ -188,9 +194,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   if (viewModel.formKey.currentState!
                                       .validate()) {
                                     viewModel.register();
-                                    Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+                                    Navigator.pushReplacementNamed(
+                                        context, HomeScreen.routeName);
                                   }
-
                                 },
                                 child: Text(
                                   "Sign Up",

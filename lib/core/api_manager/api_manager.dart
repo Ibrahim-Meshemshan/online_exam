@@ -10,6 +10,7 @@ import '../../config/constant.dart';
 import '../../feature/app/explore/data/models/all_exam_on_subject_dto.dart';
 import '../../feature/app/profile/data/model/change_password_dto.dart';
 import '../../feature/app/profile/data/model/profile_dto.dart';
+import '../../feature/auth/confirmation/forget_password/data/models/forget_password_dto.dart';
 import '../../feature/auth/login/data/models/request/login_request.dart';
 import '../../feature/auth/login/data/models/response/login_response_model_Dto.dart';
 import '../../feature/auth/register/data/models/register_requst_model.dart';
@@ -52,7 +53,7 @@ class ApiManager {
           if (response.statusCode! >= 200 && response.statusCode! < 300) {
             return Right(loginResponse);
           } else {
-            return Left(ServerError(errorMessage: loginResponse.message));
+            return Left(ServerError(errorMessage: loginResponse.message ?? ''));
           }
         } on DioException catch (e) {
           final errorMessage = e.response?.data?["message"] ??
@@ -61,7 +62,6 @@ class ApiManager {
           return Left(NetworkError(errorMessage: errorMessage));
         }
       } else {
-        print('Connectivity Result: $connectivityResult');
         //no internet connection
         return Left(
             NetworkError(errorMessage: 'please check internet connection'));
@@ -93,6 +93,62 @@ class ApiManager {
     }
   }
 
+  Future<Either<Failures, ForgetPasswordDto>> forgetPassword(
+      String email) async {
+    {
+      final List<ConnectivityResult> connectivityResult =
+          await (Connectivity().checkConnectivity());
+
+      if (connectivityResult.contains(ConnectivityResult.mobile) ||
+          connectivityResult.contains(ConnectivityResult.wifi)) {
+        try {
+          // var forgetPasswordRequest = LoginRequest(email: email, password: password);
+
+          final response = await dio.post(
+            Constant.baseUrlAuth + Constant.forgetPasswordEndpoint,
+            data: {'email': email},
+            options: Options(
+              headers: {
+                'token' : Constant.token
+              }
+            )
+          );
+
+          var forgetPasswordResponse =
+              ForgetPasswordDto.fromJson(response.data);
+          print('Status Code: ${response.statusCode}');
+          if (response.statusCode! >= 200 && response.statusCode! < 300) {
+            return Right(forgetPasswordResponse);
+          } else {
+            return Left(ServerError(
+                errorMessage: forgetPasswordResponse.message ?? ''));
+          }
+        } on DioException catch (e) {
+          final errorMessage = e.response?.data?["message"] ??
+              e.message ??
+              "An unexpected error occurred";
+          return Left(NetworkError(errorMessage: errorMessage));
+        }
+      } else {
+        //no internet connection
+        return Left(
+            NetworkError(errorMessage: 'please check internet connection'));
+      }
+    }
+  }
+
+  Future<Response> verifyCode(String resetCode) async {
+    final response = await dio.post(
+      '${Constant.baseUrlAuth}verifyResetCode',
+      data: {'resetCode': resetCode},
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to send password reset email');
+    }
+    return response;
+  }
+
   Future<Either<Failures, ProfileDto>> getProfile() async {
     {
       final List<ConnectivityResult> connectivityResult =
@@ -115,7 +171,8 @@ class ApiManager {
           if (response.statusCode! >= 200 && response.statusCode! < 300) {
             return Right(profileResponse);
           } else {
-            return Left(ServerError(errorMessage: profileResponse.message));
+            return Left(
+                ServerError(errorMessage: profileResponse.message ?? ''));
           }
         } on DioException catch (e) {
           print('DioException: ${e.response?.statusCode}, ${e.response?.data}');
@@ -157,7 +214,8 @@ class ApiManager {
           if (response.statusCode! >= 200 && response.statusCode! < 300) {
             return Right(profileResponse);
           } else {
-            return Left(ServerError(errorMessage: profileResponse.message));
+            return Left(
+                ServerError(errorMessage: profileResponse.message ?? ''));
           }
         } on DioException catch (e) {
           print('DioException: ${e.response?.statusCode}, ${e.response?.data}');
@@ -205,8 +263,8 @@ class ApiManager {
           if (response.statusCode! >= 200 && response.statusCode! < 300) {
             return Right(changePasswordResponse);
           } else {
-            return Left(
-                ServerError(errorMessage: changePasswordResponse.message));
+            return Left(ServerError(
+                errorMessage: changePasswordResponse.message ?? ''));
           }
         } on DioException catch (e) {
           print('DioException: ${e.response?.statusCode}, ${e.response?.data}');
@@ -245,7 +303,8 @@ class ApiManager {
           if (response.statusCode! >= 200 && response.statusCode! < 300) {
             return Right(getAllSubjectResponse);
           } else {
-            return Left(ServerError(errorMessage: getAllSubjectResponse.message));
+            return Left(
+                ServerError(errorMessage: getAllSubjectResponse.message ?? ''));
           }
         } on DioException catch (e) {
           print('DioException: ${e.response?.statusCode}, ${e.response?.data}');
@@ -289,7 +348,8 @@ class ApiManager {
           if (response.statusCode! >= 200 && response.statusCode! < 300) {
             return Right(allExamOnSubject);
           } else {
-            return Left(ServerError(errorMessage: allExamOnSubject.message));
+            return Left(
+                ServerError(errorMessage: allExamOnSubject.message ?? ''));
           }
         } on DioException catch (e) {
           print('DioException: ${e.response?.statusCode}, ${e.response?.data}');

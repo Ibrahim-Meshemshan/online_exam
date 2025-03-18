@@ -1,13 +1,15 @@
-class Failures {
-  String? errorMessage;
-
+abstract class Failures {
+  final String errorMessage;
   Failures({required this.errorMessage});
-}
 
-class ServerError extends Failures {
-  ServerError({required super.errorMessage});
+  @override
+  String toString() => errorMessage;
 }
 
 class NetworkError extends Failures {
-  NetworkError({required super.errorMessage});
+  NetworkError({required String errorMessage}) : super(errorMessage: errorMessage);
+}
+
+class ServerError extends Failures {
+  ServerError({required String errorMessage}) : super(errorMessage: errorMessage);
 }
