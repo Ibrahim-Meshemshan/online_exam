@@ -7,7 +7,6 @@ import '../../../../../core/utils/dialog.dart';
 import '../../../../../core/utils/sharedpreferences.dart';
 import '../../../../../core/utils/theme_manager.dart';
 import '../../../../app/explore/presentation/pages/home_screen.dart';
-import '../../../confirmation/presentation/pages/forget_password_screen.dart';
 import '../../../register/presentation/pages/register_screen.dart';
 import '../cubit/login_view_model_cubit.dart';
 import '../widgets/custom_text_form_field.dart';
@@ -124,8 +123,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           const Spacer(),
                           TextButton(
                             onPressed: () {
-                              Navigator.pushNamed(
-                                  context, ForgetPasswordScreen.routeName);
+                              // Navigator.pushNamed(
+                              //     context, ForgetPasswordScreen.routeName);
                             },
                             child: const Text(
                               'Forget Password?',

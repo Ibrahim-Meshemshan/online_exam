@@ -39,6 +39,30 @@ import '../../feature/app/profile/domain/use_case/get_profile_use_case.dart'
     as _i385;
 import '../../feature/app/profile/presentation/cubit/profile_view_model_cubit.dart'
     as _i348;
+import '../../feature/auth/confirmation/email_verification/data/data_sources/remote_email_verify_data_source_contract.dart'
+    as _i882;
+import '../../feature/auth/confirmation/email_verification/data/data_sources/remote_email_verify_data_source_impl.dart'
+    as _i974;
+import '../../feature/auth/confirmation/email_verification/data/repositories/email_verify_repo_impl.dart'
+    as _i897;
+import '../../feature/auth/confirmation/email_verification/domain/repositories/email_verify_repo_contract.dart'
+    as _i673;
+import '../../feature/auth/confirmation/email_verification/domain/use_cases/email_verify_use_case.dart'
+    as _i484;
+import '../../feature/auth/confirmation/email_verification/presentation/cubit/email_verify_cubit.dart'
+    as _i398;
+import '../../feature/auth/confirmation/forget_password/data/data_sources/forget_data_source_contract.dart'
+    as _i408;
+import '../../feature/auth/confirmation/forget_password/data/data_sources/forget_data_source_impl.dart'
+    as _i458;
+import '../../feature/auth/confirmation/forget_password/data/repositories/forget_password_repo_impl.dart'
+    as _i428;
+import '../../feature/auth/confirmation/forget_password/domain/repositories/forget_password_repo_contract.dart'
+    as _i541;
+import '../../feature/auth/confirmation/forget_password/domain/use_cases/forget_password_use_case.dart'
+    as _i774;
+import '../../feature/auth/confirmation/forget_password/presentation/cubit/forget_password_cubit.dart'
+    as _i322;
 import '../../feature/auth/login/data/data_sources/contract/remote_data_source_contract.dart'
     as _i732;
 import '../../feature/auth/login/data/data_sources/remote/remote_data_source_impl.dart'
@@ -75,6 +99,8 @@ extension GetItInjectableX on _i174.GetIt {
       environmentFilter,
     );
     gh.singleton<_i266.ApiManager>(() => _i266.ApiManager());
+    gh.singleton<_i882.RemoteVerifyDatasourceContract>(
+        () => _i974.RemoteVerifyDatasourceImpl(gh<_i266.ApiManager>()));
     gh.singleton<_i732.RemoteDataSourceContract>(
         () => _i447.RemoteDataSourceImpl(apiManager: gh<_i266.ApiManager>()));
     gh.singleton<_i937.RemoteDataSourceContractProfile>(() =>
@@ -91,15 +117,28 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i385.GetProfileUseCase(profileRepo: gh<_i682.ProfileRepo>()));
     gh.factory<_i1053.ContractDataSource>(
         () => _i1057.RemoteRegisterDataSource(gh<_i266.ApiManager>()));
+    gh.singleton<_i408.RemoteForgetDatasourceContract>(() =>
+        _i458.RemoteForgetDatasourceImpl(apiManager: gh<_i266.ApiManager>()));
+    gh.singleton<_i541.ForgetPasswordRepoContract>(() =>
+        _i428.ForgetPasswordRepoImpl(
+            gh<_i408.RemoteForgetDatasourceContract>()));
     gh.factory<_i516.RegisterRepo>(
         () => _i811.RegisterRepoImpl(gh<_i1053.ContractDataSource>()));
     gh.factory<_i218.AuthRepo>(() => _i394.AuthRepoImpl(
         remoteDataSourceContract: gh<_i732.RemoteDataSourceContract>()));
+    gh.singleton<_i673.VerifyEmailRepoContract>(() =>
+        _i897.VerifyEmailRepoImpl(gh<_i882.RemoteVerifyDatasourceContract>()));
+    gh.factory<_i484.VerifyEmailUseCase>(() => _i484.VerifyEmailUseCase(
+        verifyEmailRepoContract: gh<_i673.VerifyEmailRepoContract>()));
+    gh.factory<_i774.ForgetPasswordUseCase>(() => _i774.ForgetPasswordUseCase(
+        forgetPasswordRepoContract: gh<_i541.ForgetPasswordRepoContract>()));
     gh.factory<_i348.ProfileViewModelCubit>(() => _i348.ProfileViewModelCubit(
           getProfile: gh<_i385.GetProfileUseCase>(),
           editProfileUseCase: gh<_i975.EditProfileUseCase>(),
           changePasswordUseCase: gh<_i443.ChangePasswordUseCase>(),
         ));
+    gh.factory<_i398.EmailVerificationViewModel>(
+        () => _i398.EmailVerificationViewModel(gh<_i484.VerifyEmailUseCase>()));
     gh.factory<_i763.LoginUseCase>(
         () => _i763.LoginUseCase(authRepo: gh<_i218.AuthRepo>()));
     gh.factory<_i644.AuthViewModelCubit>(
@@ -119,6 +158,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i194.RegisterUsecase(gh<_i516.RegisterRepo>()));
     gh.factory<_i469.RegisterCubit>(
         () => _i469.RegisterCubit(gh<_i194.RegisterUsecase>()));
+    gh.factory<_i322.ForgetPasswordCubit>(
+        () => _i322.ForgetPasswordCubit(gh<_i774.ForgetPasswordUseCase>()));
     return this;
   }
 }
