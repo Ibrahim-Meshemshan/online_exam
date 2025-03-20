@@ -3,6 +3,7 @@ class Constant {
   static const String signupEndpoint = 'signup';
   static const String loginEndpoint = 'signin';
   static const String forgetPasswordEndpoint = 'forgotPassword';
+  static const String verifyResetCodeEndpoint = 'verifyResetCode';
   static const String profileEndpoint = 'profileData';
   static const String editProfileEndpoint = 'editProfile';
   static const String changePasswordEndpoint = 'changePassword';

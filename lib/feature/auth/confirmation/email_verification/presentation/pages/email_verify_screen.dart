@@ -1,11 +1,13 @@
-import 'package:exam_app/config/constant.dart';
-import 'package:exam_app/features/forgot_password/forget_pass/presentation/view/widgets/custom_button.dart';
-import 'package:exam_app/features/forgot_password/reset_password/presentation/view/screens/reset_password_screen.dart';
-import 'package:exam_app/features/forgot_password/verifing_email/presentation/view_model/cubit.dart';
-import 'package:exam_app/features/forgot_password/verifing_email/presentation/view_model/state.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:online_exam/core/utils/theme_manager.dart';
+
+import '../../../../login/presentation/widgets/custom_button.dart';
+import '../../../reset_password/presentation/pages/reset_password_screen.dart';
+import '../cubit/email_verify_cubit.dart';
+import '../cubit/email_verify_state.dart';
 
 class EmailVerificationScreen extends StatefulWidget {
   static const String routeName = 'email_verify_screen';
@@ -71,9 +73,9 @@ class EmailVerificationScreenState extends State<EmailVerificationScreen> {
             },
             builder: (context, state) {
               if (state is EmailVerificationLoading) {
-                return const Center(
+                return  Center(
                   child: CircularProgressIndicator(
-                    color: Constant.kPrimaryColor,
+                    color: ThemeManager.buttonColor,
                   ),
                 );
               } else if (state is EmailVerificationFailure) {
@@ -95,7 +97,7 @@ class EmailVerificationScreenState extends State<EmailVerificationScreen> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 16,
-                        color: Constant.greyColor,
+                        color: Colors.grey,
                       ),
                     ),
                     const SizedBox(height: 30),
@@ -114,7 +116,7 @@ class EmailVerificationScreenState extends State<EmailVerificationScreen> {
                           ),
                           margin: const EdgeInsets.symmetric(horizontal: 5),
                           child: TextFormField(
-                            cursorColor: Constant.kPrimaryColor,
+                            cursorColor: ThemeManager.buttonColor,
                             style: const TextStyle(
                               fontSize: 26,
                             ),
@@ -166,29 +168,29 @@ class EmailVerificationScreenState extends State<EmailVerificationScreen> {
                         ),
                       ),
                     const SizedBox(height: 25),
-                    CustomButton(
-                      onPressed: () async {
-                        submitCode();
-                        final code = verificationCode;
-                        if (code.isNotEmpty) {
-                          await viewModel.verifyEmail(code);
+                    Row(
+                      children: [
+                        CustomButton(
+                          backgroundColor: ThemeManager.buttonColor,
+                          onPressed: () async {
+                            submitCode();
+                            final code = verificationCode;
+                            if (code.isNotEmpty) {
+                              await viewModel.verifyEmail(code);
 
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return const ResetPasswordScreen();
-                              },
-                            ),
-                          );
-                        }
-                      },
-                      child: const Text(
-                        'Verify Code',
-                        style: TextStyle(
-                          color: Colors.white,
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return const ResetPasswordScreen();
+                                  },
+                                ),
+                              );
+                            }
+                          },
+                          text: 'Verify Code',
                         ),
-                      ),
+                      ],
                     ),
                     const SizedBox(height: 20),
                     Row(
@@ -203,14 +205,14 @@ class EmailVerificationScreenState extends State<EmailVerificationScreen> {
                         ),
                         InkWell(
                           onTap: () {},
-                          child: const Text(
+                          child:  Text(
                             'Resend',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w400,
-                              color: Constant.kPrimaryColor,
+                              color: ThemeManager.buttonColor,
                               decoration: TextDecoration.underline,
-                              decorationColor: Constant.kPrimaryColor,
+                              decorationColor: ThemeManager.buttonColor,
                             ),
                           ),
                         ),

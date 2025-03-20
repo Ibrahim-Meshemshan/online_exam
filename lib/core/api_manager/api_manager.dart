@@ -102,21 +102,13 @@ class ApiManager {
       if (connectivityResult.contains(ConnectivityResult.mobile) ||
           connectivityResult.contains(ConnectivityResult.wifi)) {
         try {
-          // var forgetPasswordRequest = LoginRequest(email: email, password: password);
-
           final response = await dio.post(
-            Constant.baseUrlAuth + Constant.forgetPasswordEndpoint,
-            data: {'email': email},
-            options: Options(
-              headers: {
-                'token' : Constant.token
-              }
-            )
-          );
+              Constant.baseUrlAuth + Constant.forgetPasswordEndpoint,
+              data: {'email': email},
+              options: Options(headers: {'token': Constant.token}));
 
           var forgetPasswordResponse =
               ForgetPasswordDto.fromJson(response.data);
-          print('Status Code: ${response.statusCode}');
           if (response.statusCode! >= 200 && response.statusCode! < 300) {
             return Right(forgetPasswordResponse);
           } else {
@@ -139,7 +131,7 @@ class ApiManager {
 
   Future<Response> verifyCode(String resetCode) async {
     final response = await dio.post(
-      '${Constant.baseUrlAuth}verifyResetCode',
+      Constant.baseUrlAuth + Constant.verifyResetCodeEndpoint,
       data: {'resetCode': resetCode},
     );
 

@@ -9,6 +9,7 @@ import '../../../../../../core/utils/theme_manager.dart';
 import '../../../../login/presentation/widgets/custom_button.dart';
 import '../../../../login/presentation/widgets/custom_text_form_field.dart';
 
+import '../../../email_verification/presentation/pages/email_verify_screen.dart';
 import '../cubit/forget_password_cubit.dart';
 import '../cubit/forget_password_state.dart';
 
@@ -79,7 +80,7 @@ class ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                         labelText: 'email',
                         hintText: 'Enter your email',
                         keyboardType: TextInputType.emailAddress,
-                        controller: TextEditingController(),
+                        controller: viewModel.emailController,
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
                             return 'enter valid email address';
@@ -100,6 +101,7 @@ class ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                                 if (viewModel.formKey.currentState!.validate()) {
                                   viewModel.sendResetEmail(
                                       viewModel.emailController.text);
+                                  Navigator.pushNamed(context, EmailVerificationScreen.routeName);
                                 }
                               },
                               text: 'Continue'),

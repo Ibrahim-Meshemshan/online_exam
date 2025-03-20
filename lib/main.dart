@@ -12,6 +12,7 @@ import 'feature/app/home_body.dart';
 import 'feature/app/profile/presentation/page/change_password.dart';
 import 'feature/app/profile/presentation/page/edit_profile_screen.dart';
 import 'feature/app/result/presentation/pages/answers_screen.dart';
+import 'feature/auth/confirmation/email_verification/presentation/pages/email_verify_screen.dart';
 import 'feature/auth/confirmation/forget_password/presentation/pages/forget_password_screen.dart';
 import 'feature/auth/login/presentation/pages/login_screen.dart';
 import 'feature/auth/register/presentation/pages/register_screen.dart';
@@ -62,6 +63,7 @@ class Online_Exam extends StatelessWidget {
             AnswersScreen.routeName: (context) =>   AnswersScreen(),
             SubjectScreen.routeName: (context) =>   SubjectScreen(),
             SubjectDetailsScreen.routeName: (context) =>   SubjectDetailsScreen(),
+            EmailVerificationScreen.routeName: (context) =>   EmailVerificationScreen(),
           },
         );
       },
