@@ -5,6 +5,7 @@ class ThemeManager {
   static Color blackColor = const Color(0xff000000);
   static Color buttonColor = const Color(0xff02369c);
   static Color containerColor = const Color(0xfff9f9f9);
+ static Color grayColor =  Colors.white24;
 
   static ThemeData appTheme = ThemeData(
 

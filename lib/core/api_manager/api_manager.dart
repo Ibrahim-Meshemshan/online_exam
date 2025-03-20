@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 
 import 'package:injectable/injectable.dart';
 import 'package:online_exam/feature/app/explore/data/models/all_exam_dto.dart';
+import 'package:online_exam/feature/app/explore/data/models/exam_question_model.dart';
 
 
 import '../../config/constant.dart';
@@ -22,19 +23,19 @@ class ApiManager {
       baseUrl: Constant.baseUrlAuth,
     ),
   );
-
+  //TODO:======================Function IS Connected =======
   Future<bool> _isConnected() async {
     final List<ConnectivityResult> connectivityResult =
-        await Connectivity().checkConnectivity();
+    await Connectivity().checkConnectivity();
     return connectivityResult.contains(ConnectivityResult.mobile) ||
         connectivityResult.contains(ConnectivityResult.wifi);
   }
-
+  //TODO:======================Login method=================
   Future<Either<Failures, LoginResponseModelDto>> login(
       String email, String password) async {
     {
       final List<ConnectivityResult> connectivityResult =
-          await (Connectivity().checkConnectivity());
+      await (Connectivity().checkConnectivity());
 
       if (connectivityResult.contains(ConnectivityResult.mobile) ||
           connectivityResult.contains(ConnectivityResult.wifi)) {
@@ -67,7 +68,7 @@ class ApiManager {
       }
     }
   }
-
+  //TODO:======================Register method=================
   Future<Either<Failures, RegisterResponseModel>> register(
       RegisterRequestModel registerRequest) async {
     if (!await _isConnected()) {
@@ -91,11 +92,11 @@ class ApiManager {
       return Left(ServerError(errorMessage: errorMessage));
     }
   }
-
+  //TODO:======================Get Profile method=================
   Future<Either<Failures, ProfileDto>> getProfile() async {
     {
       final List<ConnectivityResult> connectivityResult =
-          await (Connectivity().checkConnectivity());
+      await (Connectivity().checkConnectivity());
 
       if (connectivityResult.contains(ConnectivityResult.mobile) ||
           connectivityResult.contains(ConnectivityResult.wifi)) {
@@ -132,11 +133,11 @@ class ApiManager {
       }
     }
   }
-
+  //TODO:======================Edit Profile method=================
   Future<Either<Failures, ProfileDto>> editProfile(String lastName) async {
     {
       final List<ConnectivityResult> connectivityResult =
-          await (Connectivity().checkConnectivity());
+      await (Connectivity().checkConnectivity());
 
       if (connectivityResult.contains(ConnectivityResult.mobile) ||
           connectivityResult.contains(ConnectivityResult.wifi)) {
@@ -174,12 +175,12 @@ class ApiManager {
       }
     }
   }
-
+  //TODO:======================Change Password method=================
   Future<Either<Failures, ChangePasswordDto>> changePassword(
       String oldPassword, newPassword, confirmPassword) async {
     {
       final List<ConnectivityResult> connectivityResult =
-          await (Connectivity().checkConnectivity());
+      await (Connectivity().checkConnectivity());
 
       if (connectivityResult.contains(ConnectivityResult.mobile) ||
           connectivityResult.contains(ConnectivityResult.wifi)) {
@@ -199,7 +200,7 @@ class ApiManager {
           );
 
           var changePasswordResponse =
-              ChangePasswordDto.fromJson(response.data);
+          ChangePasswordDto.fromJson(response.data);
 
           if (response.statusCode! >= 200 && response.statusCode! < 300) {
             return Right(changePasswordResponse);
@@ -223,6 +224,7 @@ class ApiManager {
       }
     }
   }
+  //TODO:======================Get ALL Exam method=================
   Future<Either<Failures, AllExamDto>> getAllExam() async {
     {
       final List<ConnectivityResult> connectivityResult =
@@ -264,4 +266,46 @@ class ApiManager {
       }
     }
   }
+  //TODO:======================Get All Question method=================
+  Future<Either<Failures, List<ExamQuestionModel>>> getAllQuestions() async {
+    if (!await _isConnected()) {
+      return Left(NetworkError(errorMessage: 'Please check internet connection'));
+    }
+
+    try {
+      final response = await dio.get(
+        "${Constant.baseUrlExam}${Constant.questionsEndpoint}",
+        options: Options(
+          headers: {
+            "token": Constant.token,
+          },
+        ),
+      );
+
+      if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+        if (response.data is Map<String, dynamic>) {
+          // استخراج البيانات من المفتاح الصحيح
+          final Map<String, dynamic> jsonData = response.data;
+          final List<dynamic> data = jsonData["questions"]; // استخدم المفتاح الصحيح هنا
+
+          final questions = data.map((q) => ExamQuestionModel.fromJson(q)).toList();
+          return Right(questions);
+        } else if (response.data is List) {
+          // في حالة كانت البيانات بالفعل قائمة
+          final List<dynamic> data = response.data;
+          final questions = data.map((q) => ExamQuestionModel.fromJson(q)).toList();
+          return Right(questions);
+        } else {
+          return Left(ServerError(errorMessage: 'Unexpected response format'));
+        }
+      } else {
+        return Left(ServerError(errorMessage: 'Unexpected error occurred'));
+      }
+    } on DioException catch (e) {
+      final errorMessage = e.response?.data?["message"] ?? e.message ?? "An unexpected error occurred";
+      return Left(ServerError(errorMessage: errorMessage));
+    }
+  }
+
+
 }
