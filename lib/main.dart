@@ -57,7 +57,7 @@ class OnlineExam extends StatelessWidget {
           theme: ThemeManager.appTheme,
           initialRoute: route,
           home: const LoginScreen(),
-          initialRoute: ForgetPasswordScreen.routeName,
+
           routes: {
             LoginScreen.routeName: (context) => const LoginScreen(),
             QuestionScreen.routeName: (context) =>  QuestionScreen(),

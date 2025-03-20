@@ -3,8 +3,10 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 
 import 'package:injectable/injectable.dart';
-import 'package:online_exam/feature/app/explore/data/models/all_exam_dto.dart';
+import 'package:online_exam/feature/app/explore/data/models/all_exam_on_subject_dto.dart';
+import 'package:online_exam/feature/app/explore/data/models/all_subject_dto.dart';
 import 'package:online_exam/feature/app/explore/data/models/exam_question_model.dart';
+import 'package:online_exam/feature/auth/confirmation/forget_password/data/models/forget_password_dto.dart';
 
 
 import '../../config/constant.dart';
@@ -52,7 +54,7 @@ class ApiManager {
           if (response.statusCode! >= 200 && response.statusCode! < 300) {
             return Right(loginResponse);
           } else {
-            return Left(ServerError(errorMessage: loginResponse.message));
+            return Left(ServerError(errorMessage: loginResponse.message.toString()));
           }
         } on DioException catch (e) {
           final errorMessage = e.response?.data?["message"] ??
@@ -276,7 +278,7 @@ class ApiManager {
     }
   }
   //TODO:======================Get ALL Exam method=================
-  Future<Either<Failures, AllExamDto>> getAllExam() async {
+
 
   Future<Either<Failures, AllSubjectDto>> getAllSubject() async {
     {
@@ -328,7 +330,8 @@ class ApiManager {
           connectivityResult.contains(ConnectivityResult.wifi)) {
         try {
           final response = await dio.get(
-            Constant.baseUrlExam + Constant.getAllExamEndpoint,
+            Constant.baseUrlExam + Constant.getAllExamOnSubjectEndpoint,
+            queryParameters: {"subject=": subjectId},
             options: Options(
               headers: {
                 "token": Constant.token,
@@ -337,12 +340,13 @@ class ApiManager {
           );
           print("Response Data: ${response.data}");
 
-          var profileResponse = AllExamDto.fromJson(response.data);
+          var allExamOnSubject = AllExamOnSubjectDto.fromJson(response.data);
 
           if (response.statusCode! >= 200 && response.statusCode! < 300) {
-            return Right(profileResponse);
+            return Right(allExamOnSubject);
           } else {
-            return Left(ServerError(errorMessage: profileResponse.message));
+            return Left(
+                ServerError(errorMessage: allExamOnSubject.message ?? ''));
           }
         } on DioException catch (e) {
           print('DioException: ${e.response?.statusCode}, ${e.response?.data}');
