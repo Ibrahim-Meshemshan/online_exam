@@ -18,8 +18,8 @@ class RemoteDataSourceProfileImpl implements RemoteDataSourceContractProfile {
   Future<Either<Failures, ProfileEntity>> getProfile() async {
     var either = await apiManager.getProfile();
     return either.fold(
-      (failure) => Left(failure),
-      (response) => Right(response),
+          (failure) => Left(failure),
+          (response) => Right(response),
     );
   }
 
@@ -27,8 +27,8 @@ class RemoteDataSourceProfileImpl implements RemoteDataSourceContractProfile {
   Future<Either<Failures, ProfileEntity>> editProfile(String lastName) async {
     var either = await apiManager.editProfile(lastName);
     return either.fold(
-      (l) => Left(l),
-      (r) => Right(r),
+          (l) => Left(l),
+          (r) => Right(r),
     );
   }
 
@@ -38,8 +38,8 @@ class RemoteDataSourceProfileImpl implements RemoteDataSourceContractProfile {
     var either = await apiManager.changePassword(
         oldPassword, newPassword, confirmPassword);
     return either.fold(
-      (l) => Left(l),
-      (r) => Right(r),
+          (l) => Left(l),
+          (r) => Right(r),
     );
   }
 }

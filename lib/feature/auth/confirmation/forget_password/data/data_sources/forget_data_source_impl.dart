@@ -13,13 +13,13 @@ class RemoteForgetDatasourceImpl implements RemoteForgetDatasourceContract {
   RemoteForgetDatasourceImpl({required this.apiManager});
 
   @override
-  Future<Either<Failures, ForgetPasswordEntity>> forgetPassword(
-      String email) async {
+  Future<Either<Failures, ForgetPasswordEntity>> forgetPassword(String email) async {
     final either = await apiManager.forgetPassword(email);
 
     return either.fold(
-      (l) => Left(l),
-      (r) => Right(r),
+          (l) => Left(l),
+          (r) => Right(r),
     );
   }
+
 }

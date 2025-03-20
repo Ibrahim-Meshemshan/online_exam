@@ -5,6 +5,7 @@ class Constant {
   static const String forgetPasswordEndpoint = 'forgotPassword';
   static const String verifyResetCodeEndpoint = 'verifyResetCode';
   static const String profileEndpoint = 'profileData';
+  static const String questionsEndpoint = 'questions';
   static const String editProfileEndpoint = 'editProfile';
   static const String changePasswordEndpoint = 'changePassword';
   static const String baseUrlExam = 'https://exam.elevateegy.com/api/v1/';

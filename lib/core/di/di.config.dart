@@ -12,18 +12,30 @@
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
-import '../../feature/app/explore/data/data_sources/remote_data_source_exam_contract.dart'
-    as _i665;
-import '../../feature/app/explore/data/data_sources/remote_data_source_exam_impl.dart'
-    as _i303;
+import '../../feature/app/explore/data/data_sources/contract/get_all_question_contract.dart'
+    as _i959;
+import '../../feature/app/explore/data/data_sources/contract/remote_data_source_exam_contract.dart'
+    as _i789;
+import '../../feature/app/explore/data/data_sources/remote/get_all_question_impl.dart'
+    as _i507;
+import '../../feature/app/explore/data/data_sources/remote/remote_data_source_exam_impl.dart'
+    as _i598;
+import '../../feature/app/explore/data/repositories/exam_question_repo_impl.dart'
+    as _i564;
 import '../../feature/app/explore/data/repositories/exam_repo_impl.dart'
     as _i368;
+import '../../feature/app/explore/domain/repositories/exam_question_repo.dart'
+    as _i206;
 import '../../feature/app/explore/domain/repositories/exam_repo.dart' as _i449;
 import '../../feature/app/explore/domain/use_cases/get_all_exam_on_subject_use_case.dart'
     as _i630;
+import '../../feature/app/explore/domain/use_cases/get_all_questions_use_case.dart'
+    as _i635;
 import '../../feature/app/explore/domain/use_cases/get_all_subject_use_case.dart'
     as _i617;
 import '../../feature/app/explore/presentation/cubit/exam_cubit.dart' as _i168;
+import '../../feature/app/explore/presentation/cubit/question/question_cubit.dart'
+    as _i35;
 import '../../feature/app/profile/data/data_source/contract/remote_data_source_contract.dart'
     as _i937;
 import '../../feature/app/profile/data/data_source/remote/remote_data_source_impl.dart'
@@ -99,16 +111,27 @@ extension GetItInjectableX on _i174.GetIt {
       environmentFilter,
     );
     gh.singleton<_i266.ApiManager>(() => _i266.ApiManager());
+    gh.factory<_i959.ExamQuestionsContract>(
+        () => _i507.ExamQuestionFetcherImpl(gh<_i266.ApiManager>()));
     gh.singleton<_i882.RemoteVerifyDatasourceContract>(
         () => _i974.RemoteVerifyDatasourceImpl(gh<_i266.ApiManager>()));
+    gh.factory<_i789.RemoteDataSourceExamContract>(() =>
+        _i598.RemoteDataSourceExamImpl(apiManager: gh<_i266.ApiManager>()));
     gh.singleton<_i732.RemoteDataSourceContract>(
         () => _i447.RemoteDataSourceImpl(apiManager: gh<_i266.ApiManager>()));
+    gh.factory<_i206.ExamQuestionFetcherRepo>(() =>
+        _i564.ExamQuestionFetcherRepoImpl(gh<_i959.ExamQuestionsContract>()));
     gh.singleton<_i937.RemoteDataSourceContractProfile>(() =>
         _i650.RemoteDataSourceProfileImpl(apiManager: gh<_i266.ApiManager>()));
-    gh.factory<_i665.RemoteDataSourceExamContract>(() =>
-        _i303.RemoteDataSourceExamImpl(apiManager: gh<_i266.ApiManager>()));
+    gh.factory<_i449.ExamRepo>(() => _i368.ExamRepoImpl(
+        remoteDataSourceExamContract:
+            gh<_i789.RemoteDataSourceExamContract>()));
     gh.factory<_i682.ProfileRepo>(() => _i233.ProfileRepoImpl(
         remoteDataSourceContract: gh<_i937.RemoteDataSourceContractProfile>()));
+    gh.factory<_i630.GetAllExamOnSubjectUseCase>(
+        () => _i630.GetAllExamOnSubjectUseCase(examRepo: gh<_i449.ExamRepo>()));
+    gh.factory<_i617.GetAllSubjectEntity>(
+        () => _i617.GetAllSubjectEntity(examRepo: gh<_i449.ExamRepo>()));
     gh.factory<_i443.ChangePasswordUseCase>(() =>
         _i443.ChangePasswordUseCase(profileRepo: gh<_i682.ProfileRepo>()));
     gh.factory<_i975.EditProfileUseCase>(
@@ -119,11 +142,19 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i1057.RemoteRegisterDataSource(gh<_i266.ApiManager>()));
     gh.singleton<_i408.RemoteForgetDatasourceContract>(() =>
         _i458.RemoteForgetDatasourceImpl(apiManager: gh<_i266.ApiManager>()));
+    gh.factory<_i168.ExamCubit>(() => _i168.ExamCubit(
+          getAllExamOnSubjectUseCase: gh<_i630.GetAllExamOnSubjectUseCase>(),
+          getAllSubjectEntity: gh<_i617.GetAllSubjectEntity>(),
+        ));
     gh.singleton<_i541.ForgetPasswordRepoContract>(() =>
         _i428.ForgetPasswordRepoImpl(
             gh<_i408.RemoteForgetDatasourceContract>()));
     gh.factory<_i516.RegisterRepo>(
         () => _i811.RegisterRepoImpl(gh<_i1053.ContractDataSource>()));
+    gh.factory<_i635.GetAllQuestionsUseCase>(() =>
+        _i635.GetAllQuestionsUseCase(gh<_i206.ExamQuestionFetcherRepo>()));
+    gh.factory<_i35.QuestionCubit>(
+        () => _i35.QuestionCubit(gh<_i635.GetAllQuestionsUseCase>()));
     gh.factory<_i218.AuthRepo>(() => _i394.AuthRepoImpl(
         remoteDataSourceContract: gh<_i732.RemoteDataSourceContract>()));
     gh.singleton<_i673.VerifyEmailRepoContract>(() =>
@@ -143,17 +174,6 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i763.LoginUseCase(authRepo: gh<_i218.AuthRepo>()));
     gh.factory<_i644.AuthViewModelCubit>(
         () => _i644.AuthViewModelCubit(loginUseCase: gh<_i763.LoginUseCase>()));
-    gh.factory<_i449.ExamRepo>(() => _i368.ExamRepoImpl(
-        remoteDataSourceExamContract:
-            gh<_i665.RemoteDataSourceExamContract>()));
-    gh.factory<_i617.GetAllSubjectEntity>(
-        () => _i617.GetAllSubjectEntity(examRepo: gh<_i449.ExamRepo>()));
-    gh.factory<_i630.GetAllExamOnSubjectUseCase>(
-        () => _i630.GetAllExamOnSubjectUseCase(examRepo: gh<_i449.ExamRepo>()));
-    gh.factory<_i168.ExamCubit>(() => _i168.ExamCubit(
-          getAllExamOnSubjectUseCase: gh<_i630.GetAllExamOnSubjectUseCase>(),
-          getAllSubjectEntity: gh<_i617.GetAllSubjectEntity>(),
-        ));
     gh.factory<_i194.RegisterUsecase>(
         () => _i194.RegisterUsecase(gh<_i516.RegisterRepo>()));
     gh.factory<_i469.RegisterCubit>(
