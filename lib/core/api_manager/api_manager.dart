@@ -92,7 +92,56 @@ class ApiManager {
       return Left(ServerError(errorMessage: errorMessage));
     }
   }
-  //TODO:======================Get Profile method=================
+
+  Future<Either<Failures, ForgetPasswordDto>> forgetPassword(
+      String email) async {
+    {
+      final List<ConnectivityResult> connectivityResult =
+          await (Connectivity().checkConnectivity());
+
+      if (connectivityResult.contains(ConnectivityResult.mobile) ||
+          connectivityResult.contains(ConnectivityResult.wifi)) {
+        try {
+          final response = await dio.post(
+              Constant.baseUrlAuth + Constant.forgetPasswordEndpoint,
+              data: {'email': email},
+              options: Options(headers: {'token': Constant.token}));
+
+          var forgetPasswordResponse =
+              ForgetPasswordDto.fromJson(response.data);
+          if (response.statusCode! >= 200 && response.statusCode! < 300) {
+            return Right(forgetPasswordResponse);
+          } else {
+            return Left(ServerError(
+                errorMessage: forgetPasswordResponse.message ?? ''));
+          }
+        } on DioException catch (e) {
+          final errorMessage = e.response?.data?["message"] ??
+              e.message ??
+              "An unexpected error occurred";
+          return Left(NetworkError(errorMessage: errorMessage));
+        }
+      } else {
+        //no internet connection
+        return Left(
+            NetworkError(errorMessage: 'please check internet connection'));
+      }
+    }
+  }
+
+  Future<Response> verifyCode(String resetCode) async {
+    final response = await dio.post(
+      Constant.baseUrlAuth + Constant.verifyResetCodeEndpoint,
+      data: {'resetCode': resetCode},
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to send password reset email');
+    }
+    return response;
+  }
+//TODO:======================Get Profile method=================
+
   Future<Either<Failures, ProfileDto>> getProfile() async {
     {
       final List<ConnectivityResult> connectivityResult =
@@ -115,7 +164,8 @@ class ApiManager {
           if (response.statusCode! >= 200 && response.statusCode! < 300) {
             return Right(profileResponse);
           } else {
-            return Left(ServerError(errorMessage: profileResponse.message));
+            return Left(
+                ServerError(errorMessage: profileResponse.message ?? ''));
           }
         } on DioException catch (e) {
           print('DioException: ${e.response?.statusCode}, ${e.response?.data}');
@@ -157,7 +207,8 @@ class ApiManager {
           if (response.statusCode! >= 200 && response.statusCode! < 300) {
             return Right(profileResponse);
           } else {
-            return Left(ServerError(errorMessage: profileResponse.message));
+            return Left(
+                ServerError(errorMessage: profileResponse.message ?? ''));
           }
         } on DioException catch (e) {
           print('DioException: ${e.response?.statusCode}, ${e.response?.data}');
@@ -205,8 +256,8 @@ class ApiManager {
           if (response.statusCode! >= 200 && response.statusCode! < 300) {
             return Right(changePasswordResponse);
           } else {
-            return Left(
-                ServerError(errorMessage: changePasswordResponse.message));
+            return Left(ServerError(
+                errorMessage: changePasswordResponse.message ?? ''));
           }
         } on DioException catch (e) {
           print('DioException: ${e.response?.statusCode}, ${e.response?.data}');
@@ -226,6 +277,49 @@ class ApiManager {
   }
   //TODO:======================Get ALL Exam method=================
   Future<Either<Failures, AllExamDto>> getAllExam() async {
+
+  Future<Either<Failures, AllSubjectDto>> getAllSubject() async {
+    {
+      final List<ConnectivityResult> connectivityResult =
+          await (Connectivity().checkConnectivity());
+
+      if (connectivityResult.contains(ConnectivityResult.mobile) ||
+          connectivityResult.contains(ConnectivityResult.wifi)) {
+        try {
+          final response = await dio.get(
+            Constant.baseUrlExam + Constant.getAllSubjectEndpoint,
+            options: Options(
+              headers: {
+                "token": Constant.token,
+              },
+            ),
+          );
+          var getAllSubjectResponse = AllSubjectDto.fromJson(response.data);
+          if (response.statusCode! >= 200 && response.statusCode! < 300) {
+            return Right(getAllSubjectResponse);
+          } else {
+            return Left(
+                ServerError(errorMessage: getAllSubjectResponse.message ?? ''));
+          }
+        } on DioException catch (e) {
+          print('DioException: ${e.response?.statusCode}, ${e.response?.data}');
+          final errorMessage = e.response?.data?["message"].toString() ??
+              e.message ??
+              "An unexpected error occurred";
+          return Left(NetworkError(errorMessage: errorMessage));
+        }
+      } else {
+        print('Connectivity Result: $connectivityResult');
+        //no internet connection
+        return Left(
+          NetworkError(errorMessage: 'please check internet connection'),
+        );
+      }
+    }
+  }
+
+  Future<Either<Failures, AllExamOnSubjectDto>> getAllExamOnSubject(
+      String subjectId) async {
     {
       final List<ConnectivityResult> connectivityResult =
       await (Connectivity().checkConnectivity());

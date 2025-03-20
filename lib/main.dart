@@ -6,6 +6,8 @@ import 'package:online_exam/core/utils/theme_manager.dart';
 import 'core/di/di.dart';
 import 'core/utils/sharedpreferences.dart';
 import 'feature/app/explore/presentation/cubit/question/question_cubit.dart';
+import 'feature/app/explore/presentation/pages/subject_details_screen.dart';
+import 'feature/app/explore/presentation/pages/subject_screen.dart';
 import 'feature/app/explore/presentation/pages/home_screen.dart';
 import 'feature/app/explore/presentation/pages/question_screen.dart';
 
@@ -13,7 +15,8 @@ import 'feature/app/home_body.dart';
 import 'feature/app/profile/presentation/page/change_password.dart';
 import 'feature/app/profile/presentation/page/edit_profile_screen.dart';
 import 'feature/app/result/presentation/pages/answers_screen.dart';
-import 'feature/auth/confirmation/presentation/pages/forget_password_screen.dart';
+import 'feature/auth/confirmation/email_verification/presentation/pages/email_verify_screen.dart';
+import 'feature/auth/confirmation/forget_password/presentation/pages/forget_password_screen.dart';
 import 'feature/auth/login/presentation/pages/login_screen.dart';
 import 'feature/auth/register/presentation/pages/register_screen.dart';
 
@@ -53,16 +56,27 @@ class OnlineExam extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           theme: ThemeManager.appTheme,
           initialRoute: route,
+          home: const LoginScreen(),
+          initialRoute: ForgetPasswordScreen.routeName,
           routes: {
             LoginScreen.routeName: (context) => const LoginScreen(),
             QuestionScreen.routeName: (context) =>  QuestionScreen(),
             HomeScreen.routeName: (context) => HomeScreen(),
             ForgetPasswordScreen.routeName: (context) => const ForgetPasswordScreen(),
+            HomeScreen.routeName: (context) =>  HomeScreen(),
+            ForgetPasswordScreen.routeName: (context) =>  ForgetPasswordScreen(),
             RegisterScreen.routeName: (context) => const RegisterScreen(),
             EditProfileScreen.routeName: (context) => EditProfileScreen(),
             ChangePassword.routeName: (context) => ChangePassword(),
             HomeBody.routeName: (context) => HomeBody(),
             AnswersScreen.routeName: (context) => AnswersScreen(),
+            EditProfileScreen.routeName: (context) =>  EditProfileScreen(),
+            ChangePassword.routeName: (context) =>  ChangePassword(),
+            HomeBody.routeName: (context) =>  HomeBody(),
+            AnswersScreen.routeName: (context) =>   AnswersScreen(),
+            SubjectScreen.routeName: (context) =>   SubjectScreen(),
+            SubjectDetailsScreen.routeName: (context) =>   SubjectDetailsScreen(),
+            EmailVerificationScreen.routeName: (context) =>   EmailVerificationScreen(),
           },
         );
       },
